@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#510C76"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>TRC App · Prototipo v0.5</title>
+<style>
+:root{--p:#510C76;--pa:#510C76;--p100:#EFE6F5;--p50:#F8F4FB;--y:#FFC400;--o:#FF4E00;--g:#4E8A0E;--b:#1B7A90;
+ --gbg:#E5F3D0;--obg:#FFE3D6;--ybg:#FFF3C4;--bbg:#DDF0F5;--ot:#B33800;--gt:#4E8A0E;--yt:#7a5c00;--bt:#1B7A90;
+ --paper:#F5F3F8;--pn:#fff;--line:#E4DDEB;--line2:#EFE9F3;--ink:#1D1226;--ink2:#5B4D68;--ink3:#8A7D97;--red:#D93A00;--grn:#4E8A0E;--amb:#FFC400;--blu:#1B7A90;
+ --f:Inter,"Segoe UI",system-ui,Arial,sans-serif;--fm:ui-monospace,Consolas,"Courier New",monospace;color-scheme:light}
+[data-theme=dark]{--pa:#D9BCF0;--p100:#2E2040;--p50:#251A32;--gbg:#23361A;--obg:#4A2314;--ybg:#43380F;--bbg:#143440;--ot:#FFB08A;--gt:#A8E063;--yt:#FFD95C;--bt:#8FD6E6;
+ --paper:#120D18;--pn:#1D1626;--line:#3B2F49;--line2:#2D2339;--ink:#F3EEF8;--ink2:#C6BAD3;--ink3:#8F8399;color-scheme:dark}
+[data-theme=hc]{--pa:#FFD95C;--p100:#2a2a2a;--p50:#111;--gbg:#0b3d00;--obg:#5a1500;--ybg:#4d3d00;--bbg:#00323d;--ot:#fff;--gt:#fff;--yt:#fff;--bt:#fff;
+ --paper:#000;--pn:#000;--line:#fff;--line2:#777;--ink:#fff;--ink2:#fff;--ink3:#ddd;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.4 var(--f)}
+button,input,select,textarea{font-family:inherit}
+.mono{font-family:var(--fm)}
+.bar{position:sticky;top:0;z-index:40;background:var(--pn);border-bottom:1px solid var(--line);border-top:3px solid var(--ink)}
+.in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 14px}
+.brand{font-weight:800;font-size:18px;color:var(--pa);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand b{color:var(--ink);font-weight:700}
+.brand i{display:inline-block;width:26px;height:26px;border-radius:50%;background:conic-gradient(#510C76,var(--y),var(--o),#510C76)}
+.nav{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none;margin:0 6px}.nav::-webkit-scrollbar{display:none}
+.nav button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 11px;font:600 13.5px var(--f);color:var(--ink2);cursor:pointer;white-space:nowrap;border-radius:8px 8px 0 0}
+.nav button.act{color:var(--pa);background:var(--p100);border-bottom-color:var(--pa)}
+.net{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:6px 11px;font:700 12px var(--f);border:1px solid var(--g);background:var(--gbg);color:var(--gt);cursor:pointer;min-height:34px;white-space:nowrap}
+.net i{width:8px;height:8px;border-radius:50%;background:currentColor;display:block}
+.net.off{background:var(--obg);border-color:var(--o);color:var(--ot)}
+.usr{background:var(--pn);color:var(--ink);border:1px solid var(--line);border-radius:9px;font-size:12.5px;padding:6px;max-width:130px;min-height:36px;width:auto}
+.bn{background:var(--obg);color:var(--ot);font:600 13px var(--f);text-align:center;padding:7px 14px}.bn.sy{background:var(--ybg);color:var(--yt)}
+.wrap{max-width:1120px;margin:0 auto;padding:16px 14px 110px}
+.hero{background:linear-gradient(120deg,#510C76 0%,#3A0858 100%);color:#fff;border-radius:16px;padding:20px 22px;display:flex;gap:16px;align-items:center;justify-content:space-between;box-shadow:0 6px 18px #510c7640}
+.hero small{opacity:.8;font-size:13px}.hero h1{margin:6px 0;font-size:28px;letter-spacing:-.02em;line-height:1.1;color:#fff}.hero p{margin:0;opacity:.85;font-size:13.5px;max-width:560px}
+.apt{background:#ffffff1f;border-radius:12px;padding:10px 16px;min-width:150px}.apt span{font-size:10.5px;letter-spacing:.12em;opacity:.8;font-weight:700;display:block}.apt b{font-size:26px;display:block;margin:2px 0}.apt em{font-style:normal;font-size:11.5px;opacity:.85}
+.pn{background:var(--pn);border:1px solid var(--line);border-radius:14px;margin-top:14px;box-shadow:0 1px 2px #1d12260a;overflow:hidden}
+[data-theme=hc] .pn{border-width:2px}
+.pn.red{border-color:var(--o)}
+.lbl{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:13px 16px 0;font:800 11.5px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.lbl.red{color:var(--ot)}.lbl.amb{color:var(--yt)}.lbl.grn{color:var(--gt)}
+.pb{padding:10px 16px 16px}
+.act{border:2px solid var(--pa);box-shadow:0 6px 20px #510c7633}
+h1{font:800 26px/1.1 var(--f);margin:0;letter-spacing:-.02em}
+h2{font:700 19px/1.2 var(--f);margin:0 0 4px}
+h3{font:700 15.5px var(--f);margin:0 0 4px}
+.k{font:800 11.5px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.sub{color:var(--ink2);font-size:13px}.dim{color:var(--ink3)}
+.row{display:flex;align-items:center;gap:10px}.sp{justify-content:space-between}.grow{flex:1;min-width:0}.wr{flex-wrap:wrap}
+.st{display:inline-block;padding:3px 9px;border-radius:99px;font:800 10.5px var(--f);letter-spacing:.06em;text-transform:uppercase;background:var(--p100);color:var(--pa);white-space:nowrap}
+.st.red{background:var(--obg);color:var(--ot)}.st.amb{background:var(--ybg);color:var(--yt)}.st.grn{background:var(--gbg);color:var(--gt)}.st.blu{background:var(--bbg);color:var(--bt)}.st.ln{background:var(--pn);color:var(--ink2);border:1px solid var(--line)}
+.late{color:var(--ot);font-weight:700}
+.b{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:0;background:#510C76;color:#fff;font:700 14.5px var(--f);cursor:pointer;border-radius:10px;padding:8px 14px;text-align:center;text-decoration:none}
+[data-theme=dark] .b{background:#7B35A6}
+[data-theme=hc] .b{background:#FFD95C;color:#000;border:2px solid #fff}
+.b:active{opacity:.8}
+.b.sec{background:var(--pn);color:var(--pa);border:1px solid var(--line)}
+.b.red{background:var(--o);color:#fff}
+.b.xl{min-height:80px;font-size:21px;border-radius:16px;font-weight:800}
+.b.sm{display:inline-flex;width:auto;min-height:36px;font-size:13px;padding:6px 12px}
+.b.dis,.b[disabled]{opacity:.4;pointer-events:none}
+label.b{margin:0}
+input,select,textarea{width:100%;background:var(--pn);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-size:16px;min-height:44px}
+textarea{resize:vertical}
+.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:12px 0 4px}
+.bigin{font:800 34px var(--f);text-align:center;min-height:68px;margin-bottom:10px}
+.tn{font:800 54px/1 var(--f);letter-spacing:-.02em;color:var(--pa);font-variant-numeric:tabular-nums}
+.tn small{font-size:18px;color:var(--ink2);letter-spacing:0;font-weight:600}
+.strip{height:9px;border-radius:99px;background:var(--p100);overflow:hidden;margin-top:12px}
+.strip i{display:block;height:100%;background:linear-gradient(90deg,#7B35A6,var(--y))}.strip.over i{background:var(--o)}
+.acttx{font:800 26px/1.15 var(--f);margin:6px 0 16px;letter-spacing:-.01em}
+.stop{background:var(--o);color:#fff;border-radius:14px;margin-top:14px;padding:16px;box-shadow:0 6px 20px #ff4e0040}
+[data-theme=hc] .stop{background:#fff;color:#000}
+.stop .big{font:800 34px/1 var(--f);letter-spacing:.06em}
+.stop ul{margin:8px 0 12px;padding-left:20px;font-size:16px}
+.stop .b{background:#fff;color:#1D1226;margin-top:8px}
+.stop select{color:#1D1226;background:#fff}
+.ex{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 11px;margin:0 6px 6px 0;font:700 12px var(--f);color:var(--ink2);background:var(--pn)}
+.ex.ok{background:var(--gbg);color:var(--gt);border-color:var(--g)}.ex.no{background:var(--obg);color:var(--ot);border-color:var(--o)}
+.rw{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--line2)}
+.tm{font:700 13px var(--fm);width:50px;color:var(--ink2)}
+.fc{background:var(--pn);border:1px solid var(--line);border-radius:14px;margin-top:14px;display:grid;grid-template-columns:6px 1fr;overflow:hidden;box-shadow:0 1px 2px #1d12260a}
+.fc>i{display:block;background:var(--line)}.fc>i.red{background:var(--o)}.fc>i.amb{background:var(--y)}.fc>i.grn{background:var(--g)}
+.fb{padding:14px 16px}
+.fcn{font:800 28px/1.1 var(--f);margin:8px 0 2px;letter-spacing:-.02em}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.g3>div{background:var(--p50);border-radius:12px;padding:10px 12px}.g3 b{display:block;font:800 22px var(--f);color:var(--pa)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.g4>div{background:var(--p50);border-radius:12px;padding:12px}.g4 b{display:block;font:800 20px var(--f);color:var(--pa)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-top:14px;padding-bottom:4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:var(--pn);border:1px solid var(--line);border-radius:99px;font:700 12.5px var(--f);padding:8px 14px;cursor:pointer;white-space:nowrap;color:var(--ink)}
+.tabs button.act{background:#510C76;color:#fff;border-color:#510C76}
+.ck{padding:12px 16px;border-top:1px solid var(--line2)}
+.opt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.opt button{border:1px solid var(--line);border-radius:9px;background:var(--pn);min-height:42px;font:700 12.5px var(--f);color:var(--ink2);cursor:pointer}
+.opt button.ok.sel{background:var(--g);border-color:var(--g);color:#fff}.opt button.no.sel{background:var(--o);border-color:var(--o);color:#fff}.opt button.na.sel{background:var(--ink2);border-color:var(--ink2);color:var(--pn)}
+.lk{font:700 11.5px var(--f);color:var(--bt);background:var(--bbg);border-radius:99px;padding:3px 10px;border:0;margin-top:6px;cursor:pointer}
+.gb{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.gb button,.cats button{min-height:52px;border:1px solid var(--line);border-radius:12px;background:var(--pn);font:700 13.5px var(--f);color:var(--ink);cursor:pointer;padding:6px}
+.gb button:active,.cats button.sel{background:#510C76;color:#fff;border-color:#510C76}
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.seg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.seg.s3{grid-template-columns:repeat(3,1fr)}.seg.s5{grid-template-columns:repeat(5,1fr)}
+.seg button{border:1px solid var(--line);border-radius:10px;background:var(--pn);min-height:48px;font:700 14px var(--f);color:var(--ink);cursor:pointer}
+.seg button.sel{background:#510C76;color:#fff;border-color:#510C76}
+.seg button.sel.r{background:var(--o);border-color:var(--o)}.seg button.sel.y{background:var(--y);border-color:var(--y);color:#1D1226}.seg button.sel.g{background:var(--g);border-color:var(--g)}
+.thumb{width:46px;height:46px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.nt{border-left:3px solid var(--y);background:var(--ybg);padding:9px 12px;border-radius:0 8px 8px 0;font-size:12.5px;color:var(--yt);margin-top:14px}
+.dock{position:fixed;bottom:0;left:0;right:0;max-width:560px;margin:0 auto;background:var(--pn);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:45}
+.dock button{min-height:58px;border:1px solid var(--line);background:var(--p50);border-radius:12px;font:700 14px var(--f);color:var(--pa);cursor:pointer}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#1D1226;color:#fff;border:1px solid #5B4D68;padding:11px 16px;border-radius:12px;font:600 14px var(--f);z-index:90;max-width:92%;display:flex;gap:12px;align-items:center}
+.toast.red{background:var(--o);border-color:var(--o)}
+.sig{border:1.5px dashed #510C76;border-radius:12px;background:#fff;touch-action:none;width:100%;height:150px;display:block}
+table{border-collapse:collapse;width:100%;background:var(--pn)}
+th{font:700 11px var(--f);letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 8px;border-bottom:1px solid var(--line2);font-size:13.5px;white-space:nowrap}
+tr.dp td{border-bottom:2px solid var(--line)}
+tr.mn td:first-child{box-shadow:inset 3px 0 0 var(--y)}
+.tw{overflow-x:auto;padding:4px 12px}
+.onlym{display:none}
+.bars .br{display:flex;align-items:center;gap:10px;padding:6px 16px}.bars .br span{width:190px;font-size:13px}.bars .br div{flex:1;height:12px;background:var(--p100);border-radius:99px;overflow:hidden}.bars .br i{display:block;height:100%;background:linear-gradient(90deg,#7B35A6,var(--y))}.bars .br b{width:64px;text-align:right;font:700 13px var(--fm)}
+details.demo{margin-top:30px;font-size:12px;color:var(--ink3)}details.demo summary{cursor:pointer}
+.how ol{margin:0;padding:0}.how li{list-style:none;counter-increment:s;padding:8px 0 8px 42px;position:relative;font-size:16px}.how{counter-reset:s}.how li::before{content:counter(s);position:absolute;left:0;top:6px;background:#510C76;color:#fff;font:800 15px var(--f);width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px}
+@media(max-width:760px){.onlyd{display:none}.onlym{display:block}.usr{max-width:84px}.brand b{display:none}.hero{flex-direction:column;align-items:flex-start;padding:16px}.hero h1{font-size:23px}.apt{width:100%}.g4{grid-template-columns:repeat(2,1fr)}.tn{font-size:46px}.fcn{font-size:25px}.bars .br span{width:110px}}
+</style>
+</head>
+<body>
+<div id="top"></div><div id="app"></div>
+<script>
+/* ============ REFERENCIAS ============ */
+// Checklist ARA-FOR-GRH-633 Rev 00 (16-FEB-2026) · TRC HUBs
+const CK=[
+ ['A','Preparación del vuelo (90 min STD)',[
+  ['a1','Busca la información del vuelo (n.º de vuelo, matrícula, destino, fecha, horario, maletas en conexión)',''],
+  ['a2','Briefing con el personal involucrado (carga, control de vuelo, AVSEC) y asigna posiciones: seguridad, conectividad y directrices','pax'],
+  ['a3','Reconoce los medios de comunicación; HCC es el medio oficial para recibir y reportar novedades','nov'],
+  ['a4','Equipos y herramientas: chaleco, radio, celular, formularios, info de conexiones, LIR, headset y pin',''],
+  ['a5','Controla la operación con el Gantt según el TAT y marca los tiempos a las áreas','reg'],
+  ['a6','Walkaround antes, durante y después, libre de FOD; reportó irregularidades o daños a HCC, Mantenimiento o Tripulación','nov']]],
+ ['B','Llegada (70–40 min STD)',[
+  ['b1','Equipos solicitados y en rampa según Gantt: catering, potable, drenaje, limpieza + insumos, sillas de ruedas, fuel, GPU, ACU/ASU','gse'],
+  ['b2','Información soportada en tiempos y evidencias para que HCC tenga claridad de los motivos de demora','reg'],
+  ['b3','Seguro aproximarse a la aeronave (luces anticolisión apagadas)',''],
+  ['b4','Confirma con AVSEC y proveedor de rampa que están listos para el descargue y vagones en posición',''],
+  ['b5','Cargue coincide con la LIR y equipajes segregados para la conectividad','docs'],
+  ['b6','Cargue conforme a la LIR; reporta novedades a Despacho','nov'],
+  ['b7','Entrega documentos de vuelo al capitán (Briefing Pack y Fuel Order); necesidades de tripulación; avisa si hay gaseo con pasajeros a bordo','docs'],
+  ['b8','Firma la hoja de constancia de limpieza al confirmar que el servicio se ejecutó','docs'],
+  ['b9','Coordina y supervisa abastecimiento, descarga de equipajes, catering y acoplamiento de equipos al fuselaje','gse'],
+  ['b10','Entrega la LIR al capitán y al proveedor de rampa; revisa equipajes con la LIR de llegada y reporta discrepancias','docs'],
+  ['b11','Confirma con AVSEC los números finales del make-up y los relaciona con el total cargado y gate','']]],
+ ['C','Abordaje y cargado (35–5 min STD)',[
+  ['c1','Equipajes removidos en la puerta de embarque contabilizados para el cierre y llevados a bodega',''],
+  ['c2','Confirma fin de abordaje y coordina búsqueda de maletas de no-show según el Gantt (D-15)','pax'],
+  ['c3','Confirma con Despacho el total de pasajeros y equipajes y da el cierre final','pax'],
+  ['c4','Barra y tractor de pushback en posición al menos 10 min antes de la salida (D-10)','reg'],
+  ['c5','Firma del capitán tras revisar LIR, Fuel y Flight Plan','docs'],
+  ['c6','Headset tierra-cabina (ETD-5), si aplica','reg']]]
+];
+const CKN=CK.reduce((a,s)=>a+s[2].length,0);
+const SCEN={std:['60 min · Estándar',60],usa:['75 min · USA (Cabin Search)',75],ds:['80 min · Deep South',80],cnx:['90 min · Conectividad',90]};
+const GSE_T=['GPU','ACU','ASU','Escalera de pasajeros','Banda de equipaje','Tractor de pushback','Barra de remolque','Carros de equipaje','COBUS','Ambulift / silla de ruedas','Puente de embarque (PBB)','Camión de catering','Camión de agua potable','Camión de drenaje (waste)'];
+const DOCT=[['bp','Brief Pack','Despacho'],['fp','Flight Plan','Despacho'],['fo','Fuel Order','Despacho'],['lir','LIR','HCC'],['ls','Loadsheet (contingencia EFB/ACARS)','Despacho'],['gd','Gendecs sellados por Migración','TRC'],['cap','Firma del capitán (LIR, Fuel, Flight Plan)','Capitán']];
+const HOJT=[['limp','Constancia de limpieza'],['comb','Recibo / documentación de combustible'],['cat','Hoja de catering'],['agua','Agua potable y waste'],['rampa','Hoja de servicio de rampa (GHA)']];
+const DELAY=[['11','Check-in tardío (PAX)'],['15','Embarque (PAX)'],['18','Procesamiento de equipaje en plataforma'],['31','Documentación de aeronave / rampa'],['32','Carga / descarga'],['33','Falta o falla de equipo de carga'],['34','Falta o falla de equipo de servicio (GSE)'],['35','Limpieza'],['36','Combustible'],['37','Catering'],['41','Defecto de aeronave'],['51','Daño en operación de tierra'],['63','Tripulación tardía'],['93','Rotación de aeronave (llegada tardía)']];
+const NOVC=['Seguridad (Safety)','Protección (Security)','Equipajes','PRM / pasajeros','Combustible','GSE / equipos','Aeronave / daños','Proveedor','Documentación','Otra'];
+const ROLES={TRC:'Turnaround Coordinator',SPAX:'Sup. Servicio al Pasajero',SUP:'Supervisor GOPS'};
+const USERS=[['u1','Sup. GOPS Demo','SUP','S-0001'],['u2','Sup. Pasajeros Demo','SPAX','P-0001'],['u3','TRC Demo 1','TRC','T-1001'],['u4','TRC Demo 2','TRC','T-1002'],['u5','TRC Demo 3','TRC','T-1003']];
+const MIN=60000;let AT=0;const stamp=()=>now()-AT*MIN;
+
+/* ============ PASOS CON BLOQUEO (STOPPERS) ============
+   req = pasos que deben estar hechos antes; chk = condiciones que deben cumplirse.
+   Base: GOM 4.4.3 (calzos; GPU «si es necesario»; PBB/escalera y GSE solo tras el walkaround), ARA-DAT-GRH-603/633, Gantt 303.
+   PROPUESTA: validar cada bloqueo con Operaciones. */
+const ACTS=[
+ {id:'brief',t:'Briefing con el equipo',off:()=>90,req:[],run:r=>{Mk(r,'brief');Ck(r,'a2')}},
+ {id:'go',t:'Chocks ON · calzos puestos',off:r=>need(r)/MIN,req:[],run:r=>Mk(r,'go')},
+ {id:'walk1',t:'Walkaround de llegada, sin FOD',off:r=>need(r)/MIN-2,req:['go'],run:r=>Mk(r,'walk1')},
+ {id:'eq',t:'Equipos de la posición conectados',off:r=>need(r)/MIN-4,req:['go','walk1'],chk:[chkGse],run:r=>{Mk(r,'eq');Ck(r,'b1')}},
+ {id:'docs',t:'Brief Pack y Fuel Order entregados',off:()=>55,req:['go'],run:r=>{Dl(r,'bp');Dl(r,'fo');Mk(r,'docs')},done:r=>r.insp.docs.bp.deliv&&r.insp.docs.fo.deliv},
+ {id:'lir',t:'LIR entregada al Crew Chief',off:()=>45,req:['go'],run:r=>{Dl(r,'lir');Mk(r,'lir')},done:r=>r.insp.docs.lir.deliv},
+ {id:'mkup',t:'Make-up cerrado con AVSEC',off:()=>40,req:['go'],run:r=>{Mk(r,'mkup');Ck(r,'b11')}},
+ {id:'limp',t:'Constancia de limpieza firmada',off:()=>36,req:['go'],kind:'foto',done:r=>!!r.insp.hojas.limp,run:()=>{}},
+ {id:'emb',t:'Inicio de embarque',off:()=>35,req:['eq','limp'],run:r=>Mk(r,'emb')},
+ {id:'barra',t:'Barra y tractor en posición',off:()=>25,req:['go'],run:r=>{Mk(r,'barra');Ck(r,'c4')}},
+ {id:'pax',t:'Pasajeros finales abordados',off:()=>15,req:['emb','mkup'],kind:'num',done:r=>paxOk(r)>0,run:(r,v)=>{r.insp.pax=Object.assign({},r.insp.pax,{fin:v,at:stamp(),by:me()[1]});Mk(r,'pax')}},
+ {id:'cap',t:'Capitán firmó LIR, Fuel y Flight Plan',off:()=>12,req:['docs','lir'],run:r=>Dl(r,'cap'),done:r=>!!r.insp.docs.cap.deliv},
+ {id:'walk2',t:'Walkaround final',off:()=>11,req:['pax','cap'],run:r=>{Mk(r,'walk2');Ck(r,'a6')}},
+ {id:'push',t:'Headsets y pushback',off:()=>10,req:['pax','cap','walk2','barra'],chk:[chkGseCerrado],run:r=>{Mk(r,'push');Ck(r,'c6')}},
+ {id:'ob',t:'Off-block',off:()=>0,req:['push'],run:r=>Mk(r,'ob')}
+];
+ACTS.forEach(a=>{if(!a.done)a.done=r=>!!r.insp.ms[a.id]});
+const actById=id=>ACTS.find(a=>a.id===id);
+const offOf=(r,a)=>a.off(r);
+function Mk(r,k){if(!r.insp.ms[k])r.insp.ms[k]=stamp()}
+function Ck(r,k){const c=r.insp.checks[k];if(!c||c.auto)r.insp.checks[k]={r:'ok',c:'',at:stamp()}}
+function Dl(r,k){const d=r.insp.docs[k];if(d&&d.st==='rec'&&!d.deliv)d.deliv=stamp()}
+function paxOk(r){const p=r.insp.pax;return (p.fin!==undefined&&p.fin!=='')?(p.at||1):0}
+const ovr=(r,a)=>!!(r.insp.ovr&&r.insp.ovr[a.id]);
+const unmet=(r,a)=>ovr(r,a)?[]:(a.req||[]).map(actById).filter(x=>!x.done(r)).sort((x,y)=>offOf(r,y)-offOf(r,x));
+const chkFail=(r,a)=>ovr(r,a)?[]:(a.chk||[]).map(f=>f(r)).filter(Boolean);
+const blocked=(r,a)=>unmet(r,a).length>0||chkFail(r,a).length>0;
+function curAct(r){
+  const list=ACTS.filter(a=>!a.done(r)).sort((x,y)=>offOf(r,y)-offOf(r,x));if(!list.length)return null;
+  let a=list[0],via=null,g=0;while(g++<20){const u=unmet(r,a);if(!u.length)break;via=via||list[0];a=u[0]}
+  return {a,via,fails:chkFail(r,a)}}
+/* GSE esperado según tipo de posición. Contacto = puente con GPU y PCA integrados; Remota = GPU y ACU en tierra salvo que use APU. */
+function gseRule(r){
+  const i=r.insp,has=t=>i.gse.some(g=>g.type===t),items=[];let note='';
+  if(r.pt==='R'){
+    if(i.apu){note='La aeronave usa APU: no se requiere GPU ni ACU. No se factura GPU/ACU.'}
+    else{items.push({lbl:'GPU',ok:has('GPU'),hard:true},{lbl:'ACU',ok:has('ACU'),hard:true});note='Posición remota: GPU y ACU en tierra, salvo que el avión use APU. ASU solo si aplica.'}
+    items.push({lbl:'ASU (si aplica)',k:'ASU',ok:has('ASU'),hard:false},{lbl:'Escalera de pasajeros',ok:has('Escalera de pasajeros'),hard:false},{lbl:'COBUS',ok:has('COBUS'),hard:false});
+  }else{
+    items.push({lbl:'Puente de embarque (PBB)',ok:has('Puente de embarque (PBB)'),hard:true});
+    note='Posición de contacto: GPU y PCA los da el puente. Registre GPU externo solo si el puente no los tiene.';
+    if(has('GPU')||has('ACU')||has('ASU'))note='Atención: hay GPU/ACU externo en posición de contacto. Confirme que el puente no los tiene (se factura).';
+  }
+  return {items,note}}
+function chkGse(r){const g=gseRule(r),miss=g.items.filter(x=>x.hard&&!x.ok);if(!miss.length)return null;
+  return {msg:(r.pt==='R'?'Posición REMOTA: falta registrar '+miss.map(x=>x.lbl).join(' y ')+'.':'Posición de CONTACTO: falta registrar el '+miss[0].lbl+'.'),
+   btns:[['itab','gse','Registrar equipos']].concat(r.pt==='R'&&!r.insp.apu?[['apu','1','El avión usa APU']]:[])}}
+function chkGseCerrado(r){const n=r.insp.gse.filter(g=>!g.end).length;return n?{msg:'Hay '+n+' equipo(s) GSE todavía en uso. Finalícelos antes del pushback.',btns:[['itab','gse','Ver equipos en uso']]}:null}
+// Ítems del checklist que se completan solos
+const AUTO=[
+ ['b7',r=>{const d=r.insp.docs;return d.bp.deliv&&d.fo.deliv?Math.max(d.bp.deliv,d.fo.deliv):0},'Brief Pack y Fuel Order entregados'],
+ ['b10',r=>r.insp.docs.lir.deliv||0,'LIR entregada'],
+ ['c5',r=>r.insp.docs.cap.deliv||0,'Capitán firmó LIR, Fuel y Flight Plan'],
+ ['b8',r=>r.insp.hojas.limp?r.insp.hojas.limp.at:0,'Constancia de limpieza cargada'],
+ ['c2',paxOk,'Cierre de pasajeros registrado'],['c3',paxOk,'Cierre de pasajeros registrado']];
+function syncAuto(r){const i=r.insp;AUTO.forEach(([k,f,why])=>{const at=f(r),c=i.checks[k];if(at){if(!c||c.auto)i.checks[k]={r:'ok',c:why,at,auto:true}}else if(c&&c.auto)delete i.checks[k]})}
+
+/* ============ ESTADO ============ */
+const KEY='turnaround_puj_v05';
+const need=r=>SCEN[r.sc][1]*MIN;
+let S=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.v===4)return s}catch(e){}return init()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Almacenamiento lleno')}}
+function init(){
+  const t=Date.now();
+  const emptyI=()=>({started:null,checks:{},ms:{},gse:[],docs:{},hojas:{},nov:[],pax:{},delay:null,firma:null,cerrada:null,notas:'',apu:false});
+  // [reg, posición, tipo(C/R), llegada n.º, origen, STA, demora ETA, ATA, salida n.º, destino, STD, escenario, TRC]
+  const R=[
+   ['HI-D101','4','R','6269','SCL',-50,0,-52,'6268','EZE',30,'ds','u3'],
+   ['HI-D102','7','C','6171','SDQ',8,6,null,'6172','YUL',68,'std','u4'],
+   ['HI-D103','2','C','5973','JFK',35,0,null,'5974','JFK',105,'usa','u3'],
+   ['HI-D104','5','C','6087','GRU',-190,0,-192,'6088','GRU',-120,'std','u3'],
+   ['HI-D105','9','R','6670','BOG',95,0,null,'6671','BOG',155,'std','u4'],
+   ['HI-D106','3','C','6671','ROS',140,10,null,'6672','ROS',220,'ds','u5'],
+   ['HI-D107','6','R','86','SDQ',180,0,null,'87','SDQ',240,'std',null],
+   ['HI-D108','8','C','6461','YUL',230,0,null,'6462','YUL',300,'std',null]];
+  const rots=R.map((x,i)=>{
+    const [reg,gate,pt,an,from,sta,eg,ata,dn,to,std,sc,trc]=x,bt=180;
+    const arr={num:'DM'+an,o:from,d:'PUJ',std:t+(sta-bt)*MIN,sta:t+sta*MIN,etd:t+(sta-bt)*MIN,eta:t+(sta+eg)*MIN,atd:ata!=null?t+(ata-bt)*MIN:null,ata:ata!=null?t+ata*MIN:null,dep:ata!=null?t+(ata-bt+12)*MIN:null,land:ata!=null?t+(ata-6)*MIN:null};
+    const dep={num:'DM'+dn,o:'PUJ',d:to,std:t+std*MIN,sta:t+(std+bt)*MIN,etd:t+std*MIN,eta:t+(std+bt)*MIN,atd:null,ata:null,dep:null,land:null};
+    const r={id:'r'+(i+1),reg,gate,pt,arr,dep,sc,trc,insp:emptyI()};
+    DOCT.forEach(([k])=>r.insp.docs[k]={st:k==='ls'?'na':'rec'});
+    return r});
+  const r4=rots[3];r4.dep.atd=r4.dep.std+4*MIN;r4.dep.dep=r4.dep.atd+12*MIN;r4.insp.started=r4.arr.ata;r4.insp.cerrada=r4.dep.atd+2*MIN;r4.insp.firma='(firmado)';
+  CK.forEach(s=>s[2].forEach(([k])=>r4.insp.checks[k]={r:'ok',c:'',at:r4.arr.ata}));
+  r4.insp.delay={code:'18',resp:'GHA Rampa',note:'Procesamiento de equipaje en plataforma, +4 min.',min:4};
+  ACTS.forEach(a=>{r4.insp.ms[a.id]=r4.dep.std-(a.id==='go'?60:a.off(r4)>0?a.off(r4):0)*MIN+(a.id==='ob'?4*MIN:0)});
+  ['bp','fo','lir','cap'].forEach(k=>r4.insp.docs[k].deliv=r4.arr.ata+10*MIN);r4.insp.hojas.limp={at:r4.arr.ata+25*MIN,img:null,sync:true};r4.insp.pax={fin:'168',at:r4.dep.std-14*MIN,by:'Sup. Pasajeros Demo'};
+  // rotación 1 (posición REMOTA): en curso hasta el make-up, quedan limpieza y siguientes
+  const r1=rots[0],i1=r1.insp,std1=r1.dep.std,n1=80;
+  i1.started=r1.arr.ata+2*MIN;
+  const at=(id,o)=>{i1.ms[id]=std1-o*MIN+MIN};
+  at('brief',90);i1.ms.go=r1.arr.ata+2*MIN;i1.ms.walk1=i1.ms.go+2*MIN;i1.ms.eq=i1.ms.go+5*MIN;at('docs',55);at('lir',45);at('mkup',40);
+  ['a1','a2','a3','a4','a5','a6','b1','b3','b4','b5'].forEach(k=>i1.checks[k]={r:'ok',c:'',at:i1.ms.go});
+  i1.gse.push({id:1,type:'GPU',unit:'GPU-07',prov:'GHA',start:i1.ms.go+4*MIN,end:null},{id:2,type:'ACU',unit:'ACU-02',prov:'GHA',start:i1.ms.go+4*MIN,end:null},{id:3,type:'Escalera de pasajeros',unit:'ESC-03',prov:'GHA',start:i1.ms.go+5*MIN,end:null});
+  i1.docs.bp.deliv=i1.docs.fo.deliv=i1.ms.docs;i1.docs.lir.deliv=i1.ms.lir;
+  i1.nov.push({id:1,t:i1.ms.go+20*MIN,cat:'GSE / equipos',sev:'Media',txt:'Escalera trasera con falla de nivelación; se reemplazó ESC-03.',foto:null,sync:true,rso:false});
+  rots[2].insp.docs.lir.st='pend';rots[4].insp.docs.bp.st='pend';rots[4].insp.docs.fp.st='pend';
+  return {v:4,uid:'u3',page:'itin',rid:null,itab:'ahora',offline:false,queue:0,sim:0,rots,forig:'',fsel:'todos',opts:{qr:false,alerts:true,theme:'auto'},notif:{},impmode:'rep',
+    log:[{t,u:'Sup. GOPS Demo',x:'Asignó 6 rotaciones del día en PUJ'}]}
+}
+const now=()=>Date.now()+S.sim*MIN;
+const me=()=>USERS.find(u=>u[0]===S.uid);
+const role=()=>me()[2];
+const hm=ts=>ts?new Date(ts).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit',hour12:false}):'—';
+const dmy=ts=>new Date(ts).toLocaleDateString('es-DO',{day:'2-digit',month:'2-digit',year:'numeric'});
+const pad=n=>String(n).padStart(2,'0');
+const dur=ms=>{const m=Math.round(ms/MIN);return m<60?m+' min':Math.floor(m/60)+' h '+pad(m%60)+' min'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uname=id=>id?(USERS.find(u=>u[0]===id)||[])[1]:null;
+const cur=()=>S.rots.find(r=>r.id===S.rid);
+const mine=r=>role()==='TRC'?r.trc===S.uid:true;
+const visible=()=>S.rots.filter(mine).sort((a,b)=>a.arr.sta-b.arr.sta);
+const sched=r=>r.dep.std-r.arr.sta;
+const tipo=r=>r.pt==='R'?'REMOTA':'CONTACTO';
+function proj(r){const base=r.insp.ms.go||r.arr.ata||r.arr.eta;const etd=Math.max(r.dep.std,base+need(r));return {etd,delay:Math.round((etd-r.dep.std)/MIN)}}
+function log(x){S.log.unshift({t:now(),u:me()[1],x});S.log=S.log.slice(0,80)}
+function queue(){S.queue++;if(!S.offline)setTimeout(()=>{S.queue=0;save();render()},600)}
+function toast(m,c){document.querySelectorAll('.toast').forEach(x=>x.remove());const e=document.createElement('div');e.className='toast '+(c||'');e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),c==='red'?4200:2300)}
+function toastUndo(m){document.querySelectorAll('.toast').forEach(x=>x.remove());const e=document.createElement('div');e.className='toast';e.innerHTML='<span>'+esc(m)+'</span><button class="b sm sec" data-a="undo">Deshacer</button>';document.body.appendChild(e);setTimeout(()=>e.remove(),7000)}
+function ckDone(r){return Object.keys(r.insp.checks).length}
+function rstat(r){const i=r.insp;if(i.cerrada)return['Cerrada','grn'];if(r.arr.ata&&!i.ms.go)return['Sin Chocks ON','red'];if(i.ms.go)return['En tierra','amb'];if(now()>r.arr.eta)return['Llegando','blu'];return['Programada','ln']}
+const WRITE=['ck','delay','gquick','gstop','deliv','undeliv','solic','act','actback','close','sigclr','apu','pt','ovrreq','ovrok','ovrapprove','relevo','impgo'];
+const can=a=>!(role()==='SPAX'&&WRITE.includes(a));
+const LOCK=r=>!!r.insp.cerrada;
+
+/* ============ VISTAS ============ */
+function topbar(){
+  const nav=role()==='TRC'?[['itin','Mis vuelos'],['hist','Historial']]:[['itin','Itinerario'],['kpi','Indicadores']];
+  if(role()==='SUP')nav.push(['usr','Usuarios'],['rol','Roles']);if(role()!=='TRC')nav.push(['hist','Historial']);
+  return `<div class="bar"><div class="in"><div class="brand"><i></i>TRC App <b>· prototipo</b></div>
+   <div class="nav">${nav.map(([k,l])=>`<button class="${S.page===k||(S.page==='insp'&&k==='itin')?'act':''}" data-a="page" data-k="${k}">${l}</button>`).join('')}</div>
+   <button class="net ${S.offline?'off':''}" data-a="net"><i></i>${S.offline?'Sin señal':'En línea'}</button>
+   <select class="usr" id="thm" title="Apariencia">${[['auto','Auto'],['light','Claro'],['dark','Oscuro'],['hc','Alto contraste']].map(([v,l])=>`<option value="${v}" ${S.opts.theme===v?'selected':''}>${l}</option>`).join('')}</select><select class="usr" id="usr" title="Demo: cambiar de usuario">${USERS.map(u=>`<option value="${u[0]}" ${u[0]===S.uid?'selected':''}>${u[1]}</option>`).join('')}</select></div>
+   ${S.offline?`<div class="bn">SIN CONEXIÓN · ${S.queue} registro(s) en cola · todo se guarda en el equipo</div>`:(S.queue?`<div class="bn sy">SINCRONIZANDO ${S.queue} REGISTRO(S)…</div>`:'')}</div>`}
+function render(){
+  document.getElementById('top').innerHTML=topbar();
+  const p=S.page;let h='<div class="wrap">';
+  h+=p==='insp'?vInsp():p==='usr'?vUsr():p==='rol'?vRol():p==='hist'?vHist():p==='kpi'?vKpi():p==='imp'?vImp():vItin();
+  h+=`<details class="demo"><summary>Herramientas de demostración</summary><div style="margin-top:8px">Reloj simulado <span class="mono">${hm(now())}</span> <button class="b sm sec" data-a="adv" data-n="5">+5 min</button> <button class="b sm sec" data-a="adv" data-n="15">+15 min</button> <button class="b sm sec" data-a="reset">Reiniciar datos</button></div></details></div>`;
+  const y=window.scrollY;document.getElementById('app').innerHTML=h;if(S._keep){window.scrollTo(0,y);S._keep=false}
+}
+function ctime(ts,ref){if(!ts)return '<span class="dim">—</span>';return `<span class="mono ${ref&&ts>ref+2*MIN?'late':''}">${hm(ts)}</span>`}
+function hero(t,p){return `<div class="hero"><div><small>Operaciones</small><h1>${t}</h1><p>${p}</p></div><div class="apt"><span>AEROPUERTO</span><b>PUJ</b><em>Punta Cana DO</em></div></div>`}
+/* --- TRC: Mis vuelos --- */
+function vMisVuelos(){
+  const v=visible(),act=v.filter(r=>!r.insp.cerrada),fin=v.filter(r=>r.insp.cerrada);
+  let h=hero('Mis vuelos',esc(me()[1])+' · Solo ve los vuelos que su supervisor le asignó.');h+=enCurso(v);
+  if(act.length&&!v.some(r=>r.insp.started))h+=`<div class="pn"><div class="lbl">CÓMO SE USA</div><div class="pb how"><ol><li>Toque <b>INICIAR</b> en su vuelo.</li><li>Haga lo que dice el recuadro grande y toque el botón.</li><li>Si aparece <b>PARE</b>, resuelva lo que pide antes de seguir.</li></ol></div></div>`;
+  if(!act.length)h+=`<div class="pn"><div class="pb"><h2>${fin.length?'Vuelos del día terminados':'Sin vuelos asignados'}</h2><div class="sub">${fin.length?'No quedan rotaciones pendientes.':'Su supervisor le asignará los vuelos.'}</div></div></div>`;
+  act.forEach((r,idx)=>{
+    const a=r.arr,d=r.dep,pj=proj(r),late=Math.round((a.eta-a.sta)/MIN),st=rstat(r),started=!!r.insp.started;
+    const mins=Math.round((a.eta-now())/MIN),cu=curAct(r);
+    const stripe=st[1]==='red'?'red':r.insp.ms.go?'amb':'';
+    h+=`<div class="fc"><i class="${stripe}"></i><div class="fb"><div class="row sp wr"><span class="st ln">POS ${esc(r.gate)} · ${tipo(r)}</span><span class="st ${st[1]}">${st[0]}</span></div>
+     <div class="fcn">${a.num} → ${d.num}</div><div class="sub">${a.o} → PUJ → ${d.d} · ${r.reg}</div>
+     <div class="g3"><div><div class="k">Llega</div><b>${hm(a.ata||a.eta)}</b></div><div><div class="k">Sale</div><b>${hm(d.std)}</b></div><div><div class="k">En tierra</div><b>${SCEN[r.sc][1]} min</b></div></div>
+     ${st[1]==='red'?`<div class="late" style="font-weight:700;margin-bottom:8px">El avión está en posición y el reloj no corre: falta Chocks ON.</div>`:''}
+     ${!a.ata&&mins>0?`<div class="sub" style="margin-bottom:8px">Llega en ${mins} min${late>2?` · <span class="late">${late} min tarde</span>`:''}</div>`:''}
+     ${pj.delay>0&&!d.atd?`<div class="late" style="margin-bottom:8px">Puede salir ${pj.delay} min tarde.</div>`:''}
+     ${cu&&cu.fails.length&&started?`<div class="st red" style="margin-bottom:8px">PARE · ${esc(cu.fails[0].msg)}</div>`:''}
+     <button class="b ${idx===0?'xl':''}" data-a="open" data-id="${r.id}">${started?'Continuar':'Iniciar'}</button></div></div>`});
+  if(fin.length)h+=`<div class="pn"><div class="lbl">TERMINADOS (${fin.length})</div>${fin.map(r=>`<div class="rw"><div class="grow"><b>${r.arr.num} → ${r.dep.num}</b><div class="sub">${r.insp.delay?'Demora +'+r.insp.delay.min+' min':'Puntual'}</div></div><button class="b sm sec" data-a="open" data-id="${r.id}">Ver</button></div>`).join('')}</div>`;
+  h+=avisosToggle();return h}
+/* --- Supervisores: itinerario --- */
+function vItin(){
+  if(role()==='TRC')return vMisVuelos();
+  let v=visible();const f=S.fsel,sup=role()==='SUP';
+  if(S.forig)v=v.filter(r=>r.arr.o===S.forig||r.dep.d===S.forig);
+  if(f==='sin')v=v.filter(r=>!r.trc);else if(f==='prox')v=v.filter(r=>!r.arr.ata&&!r.insp.cerrada);else if(f==='stop')v=v.filter(r=>{const c=curAct(r);return c&&c.fails.length||rstat(r)[1]==='red'});
+  const ap=[...new Set(visible().flatMap(r=>[r.arr.o,r.dep.d]))].sort();
+  const nStop=visible().filter(r=>{const c=curAct(r);return !r.insp.cerrada&&(c&&c.fails.length||rstat(r)[1]==='red')}).length;
+  let h=`${hero('Itinerario de vuelos','Rotaciones programadas para la estación. Cada rotación es el vuelo de llegada y el de salida de la misma aeronave.')}${supBar()}
+   <div class="pn"><div class="pb row wr"><div style="min-width:170px"><span class="fl" style="margin-top:0">Origen / destino</span><select id="forig"><option value="">Todos</option>${ap.map(a=>`<option ${S.forig===a?'selected':''}>${a}</option>`).join('')}</select></div>
+    <div class="row wr" style="margin-top:14px"><button class="b sm ${f==='todos'?'':'sec'}" data-a="fsel" data-k="todos">Todas</button><button class="b sm ${f==='prox'?'':'sec'}" data-a="fsel" data-k="prox">Llegadas por venir</button>${sup?`<button class="b sm ${f==='sin'?'':'sec'}" data-a="fsel" data-k="sin">Sin TRC (${S.rots.filter(r=>!r.trc).length})</button>`:''}<button class="b sm ${f==='stop'?'red':'sec'}" data-a="fsel" data-k="stop">En PARE (${nStop})</button></div></div></div>`;
+  h+=`<div class="pn"><div class="lbl"><span>${v.length} rotación(es)</span><span>llegada + salida de la misma aeronave</span></div>`;
+  if(!v.length)h+=`<div class="pb sub">Sin resultados con estos filtros.</div>`;
+  h+=`<div class="onlyd tw"><table><thead><tr><th>Inspección</th><th>Vuelo</th><th>Ruta</th><th>STD</th><th>STA</th><th>ETD</th><th>ETA</th><th>ATD</th><th>ATA</th><th>Chocks ON</th><th>Despegue</th><th>Aterrizaje</th><th>Pos.</th><th>TRC / estado</th></tr></thead><tbody>`;
+  v.forEach(r=>{
+    const pj=proj(r),st=rstat(r),own=r.trc===S.uid,a=r.arr,d=r.dep,cu=curAct(r);
+    const opts=USERS.filter(u=>u[2]==='TRC').map(u=>`<option value="${u[0]}" ${r.trc===u[0]?'selected':''}>${u[1]}</option>`).join('');
+    const trc=sup?`<select data-assign="${r.id}" style="min-height:36px;padding:4px"><option value="">Sin asignar</option>${opts}</select>`:esc(uname(r.trc)||'Sin asignar');
+    h+=`<tr class="${own?'mn':''}"><td><button class="b sm sec" data-a="open" data-id="${r.id}">${r.insp.cerrada?'Ver':r.insp.started?'Continuar':'Abrir'}</button></td><td><b>${a.num}</b> <span class="st blu">Lleg.</span></td><td>${a.o} → ${a.d}</td><td>${ctime(a.std)}</td><td>${ctime(a.sta)}</td><td>${ctime(a.etd)}</td><td>${ctime(a.eta,a.sta)}</td><td>${ctime(a.atd)}</td><td>${ctime(a.ata,a.sta)}</td><td rowspan="2" style="vertical-align:middle;background:#fff">${r.insp.ms.go?`<b class="mono">${hm(r.insp.ms.go)}</b>`:a.ata?'<span class="st red">SIN MARCAR</span>':'<span class="dim">—</span>'}</td><td>${ctime(a.dep)}</td><td>${ctime(a.land)}</td><td rowspan="2" style="vertical-align:middle;background:#fff"><b>${esc(r.gate)}</b><div class="sub">${tipo(r)}</div></td><td rowspan="2" style="vertical-align:middle;background:#fff">${trc}<div style="margin-top:4px"><span class="st ${st[1]}">${st[0]}</span>${cu&&cu.fails.length&&!r.insp.cerrada?` <span class="st red">PARE</span>`:''}</div>${reqTag(r)}</td></tr>
+    <tr class="dp ${own?'mn':''}"><td></td><td><b>${d.num}</b> <span class="st">Sal.</span></td><td>${d.o} → ${d.d}</td><td>${ctime(d.std)}</td><td>${ctime(d.sta)}</td><td>${d.atd?ctime(d.etd):`<span class="mono ${pj.delay>0?'late':''}">${hm(pj.etd)}</span>`}</td><td>${ctime(d.eta)}</td><td>${ctime(d.atd,d.std)}</td><td>${ctime(d.ata)}</td><td>${ctime(d.dep)}</td><td>${ctime(d.land)}</td></tr>`});
+  h+=`</tbody></table></div>`;
+  v.forEach(r=>{const pj=proj(r),st=rstat(r),a=r.arr,d=r.dep,cu=curAct(r);
+    h+=`<div class="onlym fc"><i class="${st[1]==='red'?'red':r.insp.ms.go?'amb':''}"></i><div class="fb"><div class="row sp wr"><span class="st ln">POS ${esc(r.gate)} · ${tipo(r)}</span><span class="st ${st[1]}">${st[0]}</span></div><div class="fcn" style="font-size:26px">${a.num} → ${d.num}</div><div class="sub">${a.o} → PUJ → ${d.d} · ${r.reg}</div>
+     <div class="g3"><div><div class="k">STA/ETA</div><b style="font-size:18px">${hm(a.sta)}/${hm(a.eta)}</b></div><div><div class="k">ATA/Chocks</div><b style="font-size:18px">${hm(a.ata)}/${hm(r.insp.ms.go)}</b></div><div><div class="k">STD/ETD</div><b style="font-size:18px">${hm(d.std)}/${hm(d.atd?d.etd:pj.etd)}</b></div></div>
+     ${cu&&cu.fails.length&&!r.insp.cerrada?`<div class="st red" style="margin-bottom:8px">PARE · ${esc(cu.fails[0].msg)}</div>`:''}${reqTag(r)}
+     <div class="row">${sup?`<select class="grow" data-assign="${r.id}"><option value="">TRC: sin asignar</option>${USERS.filter(u=>u[2]==='TRC').map(u=>`<option value="${u[0]}" ${r.trc===u[0]?'selected':''}>${u[1]}</option>`).join('')}</select>`:`<span class="sub grow">TRC: ${esc(uname(r.trc)||'—')}</span>`}<button class="b sm" data-a="open" data-id="${r.id}">Abrir</button></div></div></div>`});
+  return h+`</div>`}
+/* --- Inspección --- */
+const TABS=[['ahora','Ahora'],['reg','Registro'],['check','Checklist'],['gse','GSE'],['docs','Documentos'],['nov','Novedades'],['pax','Pasajeros'],['cierre','Cierre']];
+function timerPanel(r){
+  const i=r.insp,go=i.ms.go,nd=SCEN[r.sc][1],t=now();
+  if(!go){const a=r.arr.ata,hot=a||t>r.arr.eta,m=a?Math.round((t-a)/MIN):0;
+    return `<div class="pn ${hot?'red':''}"><div class="lbl ${hot?'red':''}"><span>RELOJ DE TIERRA</span><span>DETENIDO</span></div><div class="pb"><div class="tn">--:--</div><div class="sub" style="margin-top:6px">El tiempo en tierra empieza cuando se marca <b>CHOCKS ON</b>.${a?` El avión está en posición desde ${hm(a)} (ATA)${m>0?` · <b class="late">${m} min sin marcar</b>`:''}.`:' El avión aún no llega.'}</div></div></div>`}
+  const el=Math.max(0,Math.round((t-go)/MIN)),left=nd-el,margin=Math.round((r.dep.std-go)/MIN)-nd,over=left<0;
+  return `<div class="pn"><div class="lbl"><span>RELOJ DE TIERRA · CHOCKS ON ${hm(go)}</span><span>TAT ${nd} MIN</span></div><div class="pb"><div class="row sp"><div class="tn ${over?'late':''}">T+${el}<small> min</small></div><div style="text-align:right"><div class="k">${over?'Excedido':'Restan'}</div><div class="mono" style="font-size:28px;font-weight:700">${Math.abs(left)} min</div></div></div>
+   <div class="strip ${over?'over':''}"><i style="width:${Math.min(100,el/nd*100)}%"></i></div>
+   ${margin<0?`<div class="late" style="margin-top:8px;font-weight:700">Chocks ON tarde: entre Chocks ON y STD hay ${nd+margin} min y el estándar es ${nd}.</div>`:`<div class="sub" style="margin-top:8px">Margen sobre el estándar: +${margin} min · STD ${hm(r.dep.std)}</div>`}</div></div>`}
+function posPanel(r){const g=gseRule(r);
+  return `<div class="pn"><div class="lbl"><span>POSICIÓN ${esc(r.gate)} · ${tipo(r)}${r.insp.apu?' · USA APU':''}</span><button class="b sm sec" style="min-height:26px;padding:0 8px" data-a="itab" data-k="gse">Cambiar</button></div><div class="pb">${g.items.map(x=>`<span class="ex ${x.ok?'ok':x.hard&&r.insp.ms.go?'no':'soft'}">${x.ok?'OK':x.hard&&r.insp.ms.go?'FALTA':x.hard?'Preparar':'Opcional'} · ${x.lbl}</span>`).join('')}<div class="sub">${g.note}</div></div></div>`}
+function stopPanel(fails,extra){
+  return `<div class="stop"><div class="big">PARE</div><ul>${fails.map(f=>`<li>${esc(f.msg)}</li>`).join('')}</ul>${fails.flatMap(f=>f.btns||[]).filter((b,i,a)=>a.findIndex(x=>x[2]===b[2])===i).map(b=>`<button class="b" data-a="${b[0]}" data-${b[0]==='apu'?'v':'k'}="${b[1]}">${b[2]}</button>`).join('')}${extra||''}</div>`}
+function tAhora(r){
+  const i=r.insp,t=now(),cu=curAct(r),done=ACTS.filter(a=>a.done(r)).length;
+  let h=handBanner(r)+timerPanel(r)+posPanel(r)+(S.opts.qr&&S.qrOpen===r.id?qrPanel(r):'');
+  if(i.cerrada)return h+`<div class="pn"><div class="lbl grn">CERRADO</div><div class="pb">Inspección firmada ${hm(i.cerrada)}. Solo lectura.</div></div>`;
+  if(!cu)h+=`<div class="pn act"><div class="lbl grn">PASO ${ACTS.length} DE ${ACTS.length}</div><div class="pb"><div class="acttx">Todo registrado</div><button class="b xl" data-a="itab" data-k="cierre">Cerrar y firmar</button></div></div>`;
+  else{
+    const a=cu.a,pl=r.dep.std-offOf(r,a)*MIN,d=Math.round((pl-t)/MIN);
+    if(cu.fails.length)h+=stopPanel(cu.fails,ovrUI(r,cu.a))+`<div class="pn"><div class="lbl"><span>PASO ${done+1} DE ${ACTS.length}</span><span>PENDIENTE</span></div><div class="pb"><div class="acttx" style="font-size:22px;margin:0">${a.t}</div></div></div>`;
+    else{
+      h+=`<div class="pn act"><div class="lbl ${cu.via?'amb':''}"><span>${cu.via?'ANTES DE SEGUIR':'AHORA'} · PASO ${done+1} DE ${ACTS.length}</span><span>${d>=0?hm(pl)+' · en '+d+' min':hm(pl)+' · hace '+(-d)+' min'}</span></div><div class="pb">`;
+      if(cu.via)h+=`<div class="sub">Para poder hacer «${cu.via.t}» falta esto:</div>`;
+      h+=`<div class="acttx">${a.t}</div>`;
+      if(a.kind==='num')h+=`<input id="qpax" class="bigin" type="number" inputmode="numeric" placeholder="PASAJEROS ABORDADOS"><button class="b xl" data-a="act" data-id="${a.id}">Confirmar</button>`;
+      else if(a.kind==='foto')h+=`<label class="b xl" style="cursor:pointer;display:flex;align-items:center;justify-content:center">Tomar foto<input type="file" accept="image/*" capture="environment" hidden data-hoja="limp"></label>`;
+      else h+=`<button class="b xl" data-a="act" data-id="${a.id}">${a.id==='go'?'Marcar Chocks ON':'Hecho'}</button>`;
+      h+=backUI(r,a);
+      h+=`</div></div>`}
+    const rest=ACTS.filter(x=>!x.done(r)&&x.id!==a.id).sort((x,y)=>offOf(r,y)-offOf(r,x)).slice(0,3);
+    if(rest.length)h+=`<div class="pn"><div class="lbl">DESPUÉS</div>${rest.map(x=>`<div class="rw"><div class="tm">${hm(r.dep.std-offOf(r,x)*MIN)}</div><div class="grow"><b>${x.t}</b></div>${blocked(r,x)?'<span class="st ln">Bloqueado</span>':''}</div>`).join('')}</div>`;
+  }
+  if(i.ms.ob&&!i.delay&&Math.round((i.ms.ob-r.dep.std)/MIN)>0)h+=`<div class="stop" style="margin-top:12px"><div class="big" style="font-size:26px">SALIÓ CON DEMORA</div><div style="margin:6px 0 4px">Falta codificar la causa.</div><button class="b" data-a="itab" data-k="demora">Codificar demora</button></div>`;
+  h+=relevoUI(r);
+  if(role()==='TRC')h+=`<div class="dock"><button data-a="itab" data-k="nov">Novedad</button><button data-a="itab" data-k="gse">GSE</button><button data-a="itab" data-k="docs">Papeles</button></div>`;
+  return h}
+function tReg(r){
+  const i=r.insp,t=now();
+  let h=`<div class="pn"><div class="lbl"><span>PASOS DEL TURNAROUND</span><span>Gantt 303 / checklist 603-633</span></div>`;
+  ACTS.slice().sort((x,y)=>offOf(r,y)-offOf(r,x)).forEach(a=>{const pl=r.dep.std-offOf(r,a)*MIN,re=i.ms[a.id],dn=a.done(r),bl=!dn&&blocked(r,a);
+    let pill='';if(re){const d=Math.round((re-pl)/MIN);pill=`<span class="st ${d>2?'red':'grn'}">${d>0?'+'+d:d}</span>`}else if(pl<t&&!dn){pill=`<span class="st amb">+${Math.round((t-pl)/MIN)}</span>`}
+    h+=`<div class="rw"><div class="tm">${hm(pl)}</div><div class="grow"><b>${a.t}</b><div class="sub">${dn?'Hecho'+(re?' '+hm(re):''):bl?'Bloqueado: '+esc(unmet(r,a).length?'falta «'+unmet(r,a)[0].t+'»':chkFail(r,a)[0].msg):'Pendiente'}</div></div>${pill}</div>`});
+  h+=`</div>`;
+  h+=auditPanel(r);
+  if(i.ms.ob||i.delay||r.dep.atd)h+=tDemora(r);
+  return h}
+function tDemora(r){
+  const i=r.insp,dm=Math.max(0,Math.round(((i.ms.ob||r.dep.atd||now())-r.dep.std)/MIN));
+  return `<div class="pn"><div class="lbl red">CAUSA DE LA DEMORA · +${i.delay?i.delay.min:dm} MIN</div><div class="pb"><span class="fl" style="margin-top:0">¿Qué la causó?</span><select id="dcode">${DELAY.map(([c,n])=>`<option value="${c}" ${i.delay&&i.delay.code===c?'selected':''}>${c} · ${n}</option>`).join('')}</select>
+   <span class="fl">¿Quién?</span><select id="dresp">${['GHA Rampa','GHA Servicio al pasajero','Proveedor limpieza','Proveedor combustible','Proveedor catering','Tripulación','AVSEC','HCC / Despacho','Aeronave / Mantenimiento','Otro'].map(x=>`<option ${i.delay&&i.delay.resp===x?'selected':''}>${x}</option>`).join('')}</select>
+   <span class="fl">Qué pasó (opcional)</span><textarea id="dnote" rows="2">${esc(i.delay?i.delay.note:'')}</textarea><button class="b" style="margin-top:12px" data-a="delay" data-m="${dm}">Guardar</button></div></div>`}
+function tCheck(r){
+  const i=r.insp,go=k=>({gse:'gse',docs:'docs',nov:'nov',pax:'pax',reg:'reg'})[k],nm={gse:'GSE',docs:'Documentos',nov:'Novedades',pax:'Pasajeros',reg:'Registro de tiempos'};let h='';
+  CK.forEach(([sec,tt,items])=>{const d=items.filter(x=>i.checks[x[0]]).length;
+    h+=`<div class="pn"><div class="lbl"><span>${sec} · ${tt}</span><span>${d}/${items.length}</span></div>`;
+    items.forEach(([k,tx,lk])=>{const c=i.checks[k];
+      h+=`<div class="ck"><div>${tx}</div>${lk?`<button class="lk" data-a="itab" data-k="${go(lk)}">Ir a ${nm[lk]}</button>`:''}
+      <div class="opt"><button class="ok ${c&&c.r==='ok'?'sel':''}" data-a="ck" data-k="${k}" data-r="ok">Cumple</button><button class="no ${c&&c.r==='no'?'sel':''}" data-a="ck" data-k="${k}" data-r="no">No cumple</button><button class="na ${c&&c.r==='na'?'sel':''}" data-a="ck" data-k="${k}" data-r="na">N/A</button></div>
+      ${c&&c.auto?`<div class="sub" style="margin-top:6px"><b>AUTOMÁTICO</b> · ${esc(c.c)} · ${hm(c.at)}</div>`:c?`<input style="margin-top:8px" placeholder="Comentarios${c.r==='no'?' (obligatorio)':''}" value="${esc(c.c)}" data-cm="${k}"><div class="sub" style="margin-top:4px">Registrado ${hm(c.at)}</div>`:''}</div>`});
+    h+='</div>'});
+  return h+`<div class="nt">Fuente: ARA-FOR-GRH-633 Rev 00 (16-FEB-2026), TRC HUBs. La versión digital no tiene control documental; rige el formato oficial hasta su aprobación.</div>`}
+function tGse(r){
+  const i=r.insp,open=i.gse.filter(g=>!g.end),g=gseRule(r),go=!!i.ms.go;
+  let h=`<div class="pn"><div class="lbl">TIPO DE POSICIÓN · ${esc(r.gate)}</div><div class="pb"><div class="seg"><button class="${r.pt==='C'?'sel':''}" data-a="pt" data-v="C">Contacto</button><button class="${r.pt==='R'?'sel':''}" data-a="pt" data-v="R">Remota</button></div>
+   <span class="fl">¿La aeronave usa APU?</span><div class="seg"><button class="${!i.apu?'sel':''}" data-a="apu" data-v="0">No</button><button class="${i.apu?'sel':''}" data-a="apu" data-v="1">Sí, usa APU</button></div><div class="sub" style="margin-top:8px">${g.note}</div></div></div>`;
+  h+=`<div class="pn"><div class="lbl">EQUIPOS ESPERADOS EN ESTA POSICIÓN</div>${g.items.map(x=>`<div class="rw"><div class="grow"><b>${x.lbl}</b><div class="sub">${x.hard?'Obligatorio para continuar':'Recomendado'}</div></div>${x.ok?'<span class="st grn">OK</span>':`<button class="b sm ${go?'':'dis'}" data-a="gquick" data-t="${x.k||x.lbl}">Registrar</button>`}</div>`).join('')}</div>`;
+  if(!go)h+=stopPanel([{msg:'No se pueden registrar equipos sin Chocks ON.',btns:[['itab','ahora','Volver a Ahora']]}]);
+  else if(!i.ms.walk1)h+=`<div class="nt" style="border-left-color:var(--red)"><b>GOM 4.4.3:</b> el GSE se coloca en su posición final solo después del walkaround de llegada. Hasta entonces solo se puede registrar el GPU.</div>`;
+  h+=`<div class="pn"><div class="lbl">OTROS EQUIPOS</div><div class="pb"><div class="gb">${GSE_T.filter(t=>!g.items.some(x=>(x.k||x.lbl)===t)).map(t=>`<button class="${go?'':'dis'}" data-a="gquick" data-t="${t}">${t}</button>`).join('')}</div></div></div>`;
+  if(open.length)h+=`<div class="pn"><div class="lbl amb">EN USO AHORA (${open.length})</div>${open.map(x=>`<div class="ck"><div class="row sp"><div><b>${x.type}</b><div class="sub">desde ${hm(x.start)} · ${dur(now()-x.start)}</div></div><button class="b sm red" data-a="gstop" data-id="${x.id}">Terminó</button></div><div class="row" style="margin-top:8px"><input placeholder="Unidad (opcional)" value="${esc(x.unit)}" data-gunit="${x.id}"><select data-gprov="${x.id}" style="max-width:150px"><option ${x.prov==='GHA'?'selected':''}>GHA</option><option ${x.prov.startsWith('Aero')?'selected':''}>Aeropuerto (PBB / GPU fija)</option><option ${x.prov==='Tercero'?'selected':''}>Tercero</option></select></div></div>`).join('')}</div>`;
+  const by={};i.gse.forEach(x=>{by[x.type]=(by[x.type]||0)+((x.end||now())-x.start)});
+  h+=`<div class="pn"><div class="lbl">RESUMEN PARA FACTURACIÓN</div>${i.gse.length?Object.entries(by).map(([k,v])=>`<div class="rw"><div class="grow">${k}</div><div class="mono"><b>${Math.round(v/MIN)} min</b></div></div>`).join(''):'<div class="pb sub">Sin registros.</div>'}${i.apu?'<div class="rw"><div class="sub">APU en uso: GPU y ACU no se facturan.</div></div>':''}</div>
+   <div class="nt">Regla propuesta, pendiente de validar con Operaciones: contacto = puente; remota = GPU y ACU salvo APU. Falta definir qué equipos se cobran, la unidad de cobro y quién firma la conformidad. GOM: informar al TRC conexión y desconexión de GPU/PCA (3.x, nota GPU/PCA).</div>`;
+  return h}
+function tDocs(r){
+  const i=r.insp;
+  let h=`<div class="pn"><div class="lbl">DOCUMENTOS DE VUELO</div>`;
+  DOCT.forEach(([k,n,src])=>{const d=i.docs[k];
+    const tag=d.st==='rec'?(d.deliv?`<span class="st grn">Entregado ${hm(d.deliv)}</span>`:'<span class="st blu">Recibido</span>'):d.st==='pend'?'<span class="st amb">Pendiente</span>':'<span class="st ln">No aplica</span>';
+    h+=`<div class="rw"><div class="grow"><b>${n}</b><div class="sub">${src}${d.st==='rec'?' · en el equipo':''}${['bp','fo','lir','cap'].includes(k)?' · completa el checklist':''}</div></div>${tag}${d.st==='rec'&&!d.deliv&&k!=='gd'?`<button class="b sm ${i.ms.go||k==='gd'?'':'dis'}" data-a="deliv" data-k="${k}">${k==='cap'?'Firmó':'Entregué'}</button>`:''}${d.deliv?`<button class="b sm sec" data-a="undeliv" data-k="${k}">×</button>`:''}${d.file&&IMG[d.file.key]?`<a class="b sm sec" href="${IMG[d.file.key]}" target="_blank" rel="noopener">Abrir</a>`:''}<label class="b sm sec" style="cursor:pointer">${d.file?'Reemplazar':'Subir'}<input type="file" accept="image/*,application/pdf" hidden data-doc="${k}"></label></div>`});
+  h+=`</div><div class="pn"><div class="lbl">HOJAS DE SERVICIO</div>`;
+  HOJT.forEach(([k,n])=>{const x=i.hojas[k];
+    h+=`<div class="rw"><div class="grow"><b>${n}</b><div class="sub">${x?'Cargada '+hm(x.at)+(x.sync?'':' · en cola'):'Pendiente'}</div></div>${x&&x.img&&IMG[x.img]?`<img class="thumb" src="${IMG[x.img]}" alt="">`:''}<label class="b sm ${x?'sec':''}" style="cursor:pointer">${x?'Reemplazar':'Cargar'}<input type="file" accept="image/*" capture="environment" hidden data-hoja="${k}"></label></div>`});
+  return h+`</div><div class="nt">Los documentos llegan a la app desde HCC / Despacho; ya no dependen del correo. Quedan disponibles sin conexión una vez descargados.</div>`}
+function tNov(r){
+  const i=r.insp,cat=S.ncat||NOVC[0],sev=S.nsev||'Media';
+  let h=`<div class="pn"><div class="lbl">NUEVA NOVEDAD</div><div class="pb"><span class="fl" style="margin-top:0">¿De qué trata?</span><div class="cats">${NOVC.map(c=>`<button class="${c===cat?'sel':''}" data-a="ncat" data-v="${c}">${c}</button>`).join('')}</div>
+   <span class="fl">Gravedad</span><div class="seg s3"><button class="${sev==='Baja'?'sel g':''}" data-a="nsev" data-v="Baja">Baja</button><button class="${sev==='Media'?'sel y':''}" data-a="nsev" data-v="Media">Media</button><button class="${sev==='Alta'?'sel r':''}" data-a="nsev" data-v="Alta">Alta</button></div>
+   <span class="fl">Detalle (opcional; se puede dictar con el teclado)</span><textarea id="ntxt" rows="2" placeholder="Qué, dónde, a qué hora">${esc(S.ntxt||'')}</textarea>
+   <div class="row" style="margin-top:10px"><label class="b sec grow" style="cursor:pointer">Foto<input type="file" accept="image/*" capture="environment" hidden id="nfoto"></label><label class="row" style="gap:6px;font-size:13px"><input type="checkbox" id="nrso" style="width:22px;min-height:22px"> Escalar a SMS (RSO)</label></div>
+   <button class="b" style="margin-top:12px" data-a="nsave">Registrar novedad</button></div></div>`;
+  if(!i.nov.length)h+='<div class="pn"><div class="pb sub">Sin novedades en esta rotación.</div></div>';
+  i.nov.slice().sort((a,b)=>b.t-a.t).forEach(n=>{h+=`<div class="pn"><div class="lbl ${n.sev==='Alta'?'red':''}"><span>${n.sev.toUpperCase()} · ${n.cat}</span><span class="mono">${hm(n.t)}</span></div><div class="pb"><div>${esc(n.txt)}</div><div class="row sp" style="margin-top:8px"><div class="sub">${n.rso?'<b class="late">Escalada a SMS (RSO)</b>':''}${n.sync?'':' · en cola'}</div>${n.foto&&IMG[n.foto]?`<img class="thumb" src="${IMG[n.foto]}" alt="">`:''}${!n.cerrada?`<button class="b sm sec" data-a="ncerrar" data-id="${n.id}">Cerrar</button>`:'<span class="st grn">Cerrada</span>'}</div></div></div>`});
+  return h+`<div class="nt">La app solo marca el escalamiento; el RSO se genera en la plataforma de Arajet.</div>`}
+function tPax(r){
+  const p=r.insp.pax;
+  return `<div class="pn"><div class="lbl">CIERRE DE EMBARQUE</div><div class="pb"><span class="fl" style="margin-top:0">Pasajeros abordados (final)</span><input id="pfin" type="number" inputmode="numeric" value="${p.fin??''}">
+   <span class="fl">No-show</span><input id="pns" type="number" inputmode="numeric" value="${p.ns??''}"><span class="fl">PRM / asistencias especiales</span><input id="pprm" type="number" inputmode="numeric" value="${p.prm??''}">
+   <span class="fl">Observaciones</span><textarea id="pobs" rows="2">${esc(p.obs||'')}</textarea><button class="b" style="margin-top:12px" data-a="psave">Guardar y avisar al TRC</button>${p.at?`<div class="sub" style="margin-top:8px">Guardado ${hm(p.at)} por ${esc(p.by||'')}.</div>`:''}</div></div>`}
+function tCierre(r){
+  const i=r.insp,pend=ACTS.filter(a=>!a.done(r)),noc=Object.values(i.checks).filter(c=>c.r==='no').length;
+  let h=`<div class="pn"><div class="lbl">CIERRE DE INSPECCIÓN</div><div class="pb"><div class="g4" style="margin-top:0"><div><div class="k">Pasos</div><b>${ACTS.length-pend.length}/${ACTS.length}</b></div><div><div class="k">Checklist</div><b>${ckDone(r)}/${CKN}</b></div><div><div class="k">No cumple</div><b>${noc}</b></div><div><div class="k">Hojas</div><b>${Object.keys(i.hojas).length}/${HOJT.length}</b></div></div>
+   <div class="sub" style="margin-top:10px">${esc(uname(r.trc)||me()[1])} · ${dmy(r.dep.std)} · ${r.dep.num} · ${r.reg}</div>
+   <span class="fl">Notas relevantes de la operación del vuelo</span><textarea id="notas" rows="3" data-notas="1">${esc(i.notas)}</textarea></div></div>`;
+  if(i.cerrada)return h+`<div class="pn"><div class="lbl grn">CERRADA Y FIRMADA ${hm(i.cerrada)}</div></div>`;
+  if(pend.length)h+=stopPanel([{msg:'No se puede cerrar: faltan '+pend.length+' paso(s). Siguiente: «'+curAct(r).a.t+'».',btns:[['itab','ahora','Volver a Ahora']]}]);
+  h+=`<div class="pn"><div class="lbl">FIRMA DEL TRC</div><div class="pb"><canvas id="sig" class="sig" width="800" height="300"></canvas><div class="row" style="margin-top:8px"><button class="b sm sec" data-a="sigclr">Borrar firma</button></div><button class="b xl ${pend.length||role()==='SPAX'?'dis':''}" style="margin-top:10px" data-a="close">Firmar y cerrar</button></div></div>`;
+  return h}
+function vInsp(){
+  const r=cur();if(!r||!mine(r))return `<div class="pn"><div class="lbl red">SIN ACCESO</div><div class="pb">Esa rotación no está asignada a usted.<button class="b" style="margin-top:10px" data-a="page" data-k="itin">Volver</button></div></div>`;
+  const i=r.insp,pj=proj(r),t=S.itab;
+  const body=t==='ahora'?tAhora(r):t==='reg'?tReg(r):t==='check'?tCheck(r):t==='gse'?tGse(r):t==='docs'?tDocs(r):t==='nov'?tNov(r):t==='pax'?tPax(r):t==='demora'?tDemora(r):tCierre(r);
+  if(role()==='TRC'){
+    let q=`<div class="row" style="margin-top:6px">${t==='ahora'?`<button class="b sm sec" data-a="page" data-k="itin">← Mis vuelos</button>`:`<button class="b sec" style="width:auto;min-height:48px" data-a="itab" data-k="ahora">← Volver</button>`}<div class="grow" style="text-align:right"><div class="fcn" style="font-size:24px;margin:0">${r.arr.num} → ${r.dep.num}</div><div class="sub">${r.reg} · POS ${esc(r.gate)} ${tipo(r)}</div></div></div>`;
+    if(pj.delay>0&&!r.dep.atd&&t==='ahora')q+=`<div class="nt" style="border-left-color:var(--red);color:var(--red);font-weight:700">Puede salir ${pj.delay} min tarde por la hora de llegada / Chocks ON.</div>`;
+    return q+body}
+  let h=`${hero(r.arr.num+' → '+r.dep.num,r.arr.o+' → PUJ → '+r.dep.d+' · '+r.reg+' · posición '+esc(r.gate)+' '+tipo(r)+' · '+SCEN[r.sc][0]+' · TRC: '+esc(uname(r.trc)||'sin asignar'))}<div style="margin-top:12px"><button class="b sm sec" data-a="page" data-k="itin">← Itinerario</button></div>
+   <div class="g4"><div><div class="k">STA / ETA / ATA</div><b class="mono" style="font-size:17px">${hm(r.arr.sta)} ${hm(r.arr.eta)} ${hm(r.arr.ata)}</b></div><div><div class="k">Chocks ON</div><b class="mono">${hm(i.ms.go)}</b></div><div><div class="k">STD / ETD</div><b class="mono" style="font-size:17px">${hm(r.dep.std)} ${hm(r.dep.atd?r.dep.etd:pj.etd)}</b></div><div><div class="k">Estado</div><b>${rstat(r)[0]}</b></div></div>
+   ${role()==='SPAX'?'<div class="nt">Solo lectura en pasos, checklist, GSE y documentos. Puede registrar pasajeros y novedades.</div>':''}
+   <div class="tabs">${TABS.map(([k,l])=>`<button class="${t===k?'act':''}" data-a="itab" data-k="${k}">${l}</button>`).join('')}</div>`;
+  return h+body}
+function vUsr(){
+  return `${hero('Usuarios','Personal de la estación y sus rotaciones asignadas.')}<div class="pn tw"><table><thead><tr><th>Nombre</th><th>ID</th><th>Rol</th><th>Rotaciones asignadas</th></tr></thead><tbody>${USERS.map(u=>`<tr><td>${u[1]}</td><td class="mono">${u[3]}</td><td>${ROLES[u[2]]}</td><td>${u[2]==='TRC'?S.rots.filter(r=>r.trc===u[0]).length:'—'}</td></tr>`).join('')}</tbody></table></div>`}
+function vRol(){
+  const Y='Sí',N='—',rows=[['Ver todas las rotaciones de la estación',N,Y,Y],['Ver solo las rotaciones asignadas',Y,N,N],['Asignar y reasignar TRC',N,N,Y],['Pasos, checklist, GSE y documentos',Y,N,Y],['Pasajeros y novedades',Y,Y,Y],['Firmar y cerrar',Y,N,Y],['Ver Usuarios y Roles',N,N,Y]];
+  return `${hero('Roles','Permisos propuestos para el prototipo, a validar.')}<div class="pn tw"><table><thead><tr><th>Permiso</th><th>TRC</th><th>Sup. Pasajeros</th><th>Sup. GOPS</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="white-space:normal">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`}
+function vHist(){
+  const cer=visible().filter(r=>r.insp.cerrada);
+  return `${hero('Historial','Inspecciones cerradas y registro de actividad.')}<div class="pn"><div class="lbl">INSPECCIONES CERRADAS</div>${cer.length?cer.map(r=>`<div class="rw"><div class="grow"><b>${r.arr.num} → ${r.dep.num}</b> · ${r.reg}<div class="sub">ATD ${hm(r.dep.atd)} · ${esc(uname(r.trc)||'')}${r.insp.delay?` · demora +${r.insp.delay.min} (${r.insp.delay.code})`:' · puntual'}</div></div><button class="b sm sec" data-a="open" data-id="${r.id}">Ver</button></div>`).join(''):'<div class="pb sub">Sin inspecciones cerradas.</div>'}</div>
+  <div class="pn"><div class="lbl">ACTIVIDAD</div>${S.log.slice(0,30).map(l=>`<div class="rw"><span class="tm">${hm(l.t)}</span><div class="grow sub"><b style="color:var(--ink)">${esc(l.u)}</b> · ${esc(l.x)}</div></div>`).join('')}</div>`}
+
+/* ============ ACCIONES ============ */
+const V=id=>{const e=document.getElementById(id);return e?e.value:''};
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a,d=el.dataset,r=cur();
+  if(!can(a)){toast('Su rol no permite esta acción','red');return}
+  if(r&&LOCK(r)&&['ck','gquick','gstop','deliv','undeliv','solic','act','actback','nsave','psave','delay','close','apu','pt','ovrreq','relevo'].includes(a)){toast('Inspección cerrada','red');return}
+  S._keep=false;
+  if(['page','itab','open','act','actback'].includes(a))qrStop();
+  if(a==='page'){S.page=d.k}
+  else if(a==='open'){S.rid=d.id;S.page='insp';S.itab=role()==='TRC'?'ahora':'ahora';window.scrollTo(0,0)}
+  else if(a==='itab'){S.itab=d.k;S.page='insp';window.scrollTo(0,0)}
+  else if(a==='fsel'){S.fsel=d.k}
+  else if(a==='net'){S.offline=!S.offline;if(!S.offline&&S.queue){toast('Conexión recuperada: sincronizando');setTimeout(()=>{S.queue=0;save();render();toast('Sincronizado')},1200)}else if(S.offline)toast('Sin conexión: se guarda en el equipo')}
+  else if(a==='adv'){S.sim+=+d.n;S._keep=true}
+  else if(a==='reset'){localStorage.removeItem(KEY);S=init()}
+  else if(a==='ck'){const c=r.insp.checks[d.k];r.insp.checks[d.k]={r:d.r,c:c?c.c:'',at:now()};queue();S._keep=true}
+  else if(a==='act'||a==='actback'){doAct(r,d.id,a==='actback'?+d.n:0);return}
+  else if(a==='backtoggle'){S.backFor=S.backFor===d.id?null:d.id;S._keep=true}
+  else if(a==='undo'){const u=window._undo;if(u){const rr=S.rots.find(x=>x.id===u.id);rr.insp=JSON.parse(u.snap);window._undo=null;toast('Deshecho')}}
+  else if(a==='apu'){r.insp.apu=d.v==='1';log('APU '+(r.insp.apu?'sí':'no')+' en '+r.dep.num);queue();toast(r.insp.apu?'Se registró: el avión usa APU':'Se registró: sin APU')}
+  else if(a==='pt'){r.pt=d.v;log('Posición '+r.gate+' = '+tipo(r)+' en '+r.dep.num);queue()}
+  else if(a==='gquick'){
+    if(!r.insp.ms.go){toast('PARE: sin Chocks ON no se registran equipos','red');return}
+    if(!r.insp.ms.walk1&&d.t!=='GPU'){toast('PARE: primero el walkaround de llegada (GOM 4.4.3)','red');return}
+    if(!r.insp.started)r.insp.started=now();r.insp.gse.push({id:Date.now(),type:d.t,unit:'',prov:'GHA',start:now(),end:null});queue();toast(d.t+': uso iniciado '+hm(now()))}
+  else if(a==='gstop'){const g=r.insp.gse.find(x=>x.id==d.id);g.end=now();queue();toast('Uso finalizado · '+dur(g.end-g.start))}
+  else if(a==='deliv'){if(!r.insp.ms.go&&d.k!=='gd'){toast('PARE: sin Chocks ON no se entregan documentos','red');return}r.insp.docs[d.k].deliv=now();queue();toast('Entrega registrada')}
+  else if(a==='undeliv'){delete r.insp.docs[d.k].deliv}
+  else if(a==='solic'){r.insp.docs[d.k].st='rec';queue();toast('Solicitud enviada (demo: ya recibido)')}
+  else if(a==='delay'){r.insp.delay={code:V('dcode'),resp:V('dresp'),note:V('dnote'),min:Math.max(+d.m,0)};log('Codificó demora '+V('dcode')+' en '+r.dep.num);queue();toast('Demora registrada')}
+  else if(a==='ncat'){S.ncat=d.v;S.ntxt=V('ntxt')}
+  else if(a==='nsev'){S.nsev=d.v;S.ntxt=V('ntxt')}
+  else if(a==='nsave'){const t=V('ntxt').trim()||'(sin detalle)';r.insp.nov.push({id:Date.now(),t:now(),cat:S.ncat||NOVC[0],sev:S.nsev||'Media',txt:t,foto:window._nfoto||null,sync:!S.offline,rso:document.getElementById('nrso').checked,by:me()[1]});window._nfoto=null;log('Novedad en '+r.dep.num+': '+(S.ncat||NOVC[0]));S.ntxt='';S.ncat=null;S.nsev=null;queue();toast('Novedad registrada')}
+  else if(a==='ncerrar'){r.insp.nov.find(n=>n.id==d.id).cerrada=true}
+  else if(a==='psave'){r.insp.pax={fin:V('pfin'),ns:V('pns'),prm:V('pprm'),obs:V('pobs'),at:now(),by:me()[1]};queue();toast('Cierre de pasajeros guardado')}
+  else if(a==='sigclr'){const c=document.getElementById('sig');c.getContext('2d').clearRect(0,0,c.width,c.height);window._sig=false;return}
+  else if(a==='close'){
+    const pend=ACTS.filter(x=>!x.done(r));if(pend.length){toast('PARE: faltan '+pend.length+' paso(s)','red');return}
+    if(Object.entries(r.insp.checks).some(([k,c])=>c.r==='no'&&!c.c.trim())){toast('PARE: falta comentario en ítems «No cumple»','red');return}
+    if(!window._sig){toast('Falta la firma','red');return}
+    r.insp.firma=document.getElementById('sig').toDataURL('image/png');r.insp.cerrada=now();log('Cerró y firmó '+r.arr.num+'→'+r.dep.num);queue();toast('Inspección cerrada y firmada');window._sig=false}
+  else if(a==='ovrreq'){r.insp.req={act:d.id,why:V('owhy'),at:now(),by:me()[1]};log('Pidió desbloqueo «'+actById(d.id).t+'» en '+r.dep.num+' ('+V('owhy')+')');queue();toast('Solicitud enviada al supervisor')}
+  else if(a==='ovrok'){if(role()!=='SUP')return;r.insp.ovr=r.insp.ovr||{};r.insp.ovr[d.id]={by:me()[1],why:V('owhy'),at:now()};delete r.insp.req;log('Desbloqueó «'+actById(d.id).t+'» en '+r.dep.num+' ('+V('owhy')+')');queue();toast('Paso desbloqueado')}
+  else if(a==='ovrapprove'){const rx=S.rots.find(x=>x.id===d.id);if(role()!=='SUP'||!rx||!rx.insp.req)return;rx.insp.ovr=rx.insp.ovr||{};rx.insp.ovr[rx.insp.req.act]={by:me()[1],why:rx.insp.req.why,at:now()};log('Aprobó desbloqueo «'+actById(rx.insp.req.act).t+'» en '+rx.dep.num);delete rx.insp.req;queue();toast('Desbloqueo aprobado')}
+  else if(a==='opt'){S.opts[d.k]=!S.opts[d.k];if(d.k==='alerts'&&S.opts.alerts)beep();if(d.k==='qr'&&!S.opts.qr)qrStop()}
+  else if(a==='qropen'){S.qrOpen=r.id}
+  else if(a==='qrclose'){qrStop()}
+  else if(a==='qrapply'){qrApply(V('qrtxt'));return}
+  else if(a==='relevotoggle'){S.relevo=S.relevo===r.id?null:r.id}
+  else if(a==='relevo'){const to=V('rvto');handoff(r,S.uid,to);r.trc=to;S.relevo=null;S.page='itin';S.rid=null;queue();toast('Vuelo relevado a '+uname(to))}
+  else if(a==='handack'){const h=(r.insp.hand||[]);if(h.length)h[h.length-1].ack=true}
+  else if(a==='impmode'){S.impmode=d.v;S.csvtxt=V('csvtxt')}
+  else if(a==='impgo'){if(role()!=='SUP')return;doImport();return}
+  else if(a==='csvtpl'){dl('plantilla_itinerario.csv',csvTpl().map(l=>l.split(';')))}
+  else if(a==='csvgse'){csvGse()}
+  else if(a==='csvrot'){csvRot()}
+  const rr=cur();if(rr)syncAuto(rr);
+  save();render();
+});
+document.addEventListener('change',e=>{
+  const i=e.target;
+  if(i.id==='usr'){S.uid=i.value;S.page='itin';S.rid=null;save();render();return}
+  if(i.id==='forig'){S.forig=i.value;save();render();return}
+  if(i.id==='thm'){S.opts.theme=i.value;applyTheme();save();render();return}
+  if(i.dataset.doc&&i.files[0]){const f=i.files[0],r=cur(),k=i.dataset.doc;fileSave(f).then(key=>{const d=r.insp.docs[k];d.st='rec';d.file={key,name:f.name,type:f.type};log('Cargó '+k+' en '+r.dep.num);queue();toast('Documento cargado');save();render()});return}
+  if(i.dataset.csv&&i.files[0]){i.files[0].text().then(tx=>{S.csvtxt=tx;S.imperr=null;S.impok=null;render()});return}
+  if(i.dataset.assign){const r=S.rots.find(x=>x.id===i.dataset.assign);const oldT=r.trc;r.trc=i.value||null;if(r.insp.started&&oldT&&oldT!==r.trc)handoff(r,oldT,r.trc);log('Asignó '+r.arr.num+'→'+r.dep.num+' a '+(uname(r.trc)||'nadie'));queue();save();render();toast('Asignación guardada');return}
+  if(i.dataset.cm){const c=cur().insp.checks[i.dataset.cm];if(c){c.c=i.value;save()}return}
+  if(i.dataset.notas){cur().insp.notas=i.value;save();return}
+  if(i.dataset.gunit){cur().insp.gse.find(g=>g.id==i.dataset.gunit).unit=i.value;save();return}
+  if(i.dataset.gprov){cur().insp.gse.find(g=>g.id==i.dataset.gprov).prov=i.value;save();return}
+  if(i.type==='file'&&i.files[0]){shrink(i.files[0],img=>{const r=cur();if(i.dataset.hoja){r.insp.hojas[i.dataset.hoja]={at:now(),img,sync:!S.offline};if(!r.insp.started)r.insp.started=now();log('Cargó hoja de servicio en '+r.dep.num);syncAuto(r);queue();toast('Hoja cargada');save();render()}else if(i.id==='nfoto'){window._nfoto=img;toast('Foto adjunta')}})}
+});
+/* ===== Apariencia y avisos ===== */
+function applyTheme(){let th=S.opts.theme;if(th==='auto')th=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';document.documentElement.dataset.theme=th}
+if(window.matchMedia)try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(S.opts.theme==='auto'){applyTheme();render()}})}catch(e){}
+let AC=null;
+function beep(){if(!S.opts.alerts)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=880;g.gain.value=.12;o.connect(g);g.connect(AC.destination);o.start();setTimeout(()=>o.stop(),220)}catch(e){}try{navigator.vibrate&&navigator.vibrate([250,120,250])}catch(e){}}
+function alertCheck(){
+  if(role()!=='TRC'||!S.opts.alerts)return;const t=now();let fired=false;
+  visible().filter(r=>!r.insp.cerrada).forEach(r=>{
+    const note=(key,msg)=>{if(S.notif[key])return;S.notif[key]=t;fired=true;toast(msg,'red')};
+    if(r.arr.ata&&!r.insp.ms.go&&t-r.arr.ata>=2*MIN)note(r.id+':go','Chocks ON pendiente · '+r.arr.num);
+    if(!r.insp.started)return;
+    const cu=curAct(r);if(!cu)return;
+    if(cu.fails.length)note(r.id+':stop:'+cu.a.id,'PARE · '+r.dep.num+': '+cu.fails[0].msg);
+    else if(r.dep.std-offOf(r,cu.a)*MIN<=t)note(r.id+':due:'+cu.a.id,'Vence ahora · '+r.dep.num+': '+cu.a.t)});
+  if(fired){beep();save()}}
+function avisosToggle(){return `<div class="pn"><div class="pb row sp"><div><b>Avisos con sonido y vibración</b><div class="sub">Cuando un paso vence, falta Chocks ON o aparece un PARE. Solo con la app abierta.</div></div><button class="b sm ${S.opts.alerts?'':'sec'}" data-a="opt" data-k="alerts">${S.opts.alerts?'Activados':'Apagados'}</button></div></div>`}
+/* ===== Archivos locales (IndexedDB): fotos y documentos, disponibles sin conexión ===== */
+const IMG={};let DB=null;
+function idb(){return new Promise((ok,no)=>{if(DB)return ok(DB);if(!window.indexedDB)return no('sin IndexedDB');const q=indexedDB.open('trc_app',1);q.onupgradeneeded=()=>q.result.createObjectStore('f');q.onsuccess=()=>{DB=q.result;ok(DB)};q.onerror=()=>no(q.error)})}
+async function fileSave(blob){const key='f'+Date.now()+Math.random().toString(36).slice(2,6);try{const db=await idb();await new Promise((ok,no)=>{const tx=db.transaction('f','readwrite');tx.objectStore('f').put(blob,key);tx.oncomplete=ok;tx.onerror=()=>no(tx.error)})}catch(e){}IMG[key]=URL.createObjectURL(blob);return key}
+async function imgLoad(){try{const db=await idb();const st=db.transaction('f').objectStore('f');const ks=await new Promise(ok=>{const q=st.getAllKeys();q.onsuccess=()=>ok(q.result)});for(const k of ks){const b=await new Promise(ok=>{const q=st.get(k);q.onsuccess=()=>ok(q.result)});if(b&&!IMG[k])IMG[k]=URL.createObjectURL(b)}render()}catch(e){}}
+function shrink(file,cb){const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,1000/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(async b=>cb(await fileSave(b)),'image/jpeg',.7)};im.src=rd.result};rd.readAsDataURL(file)}
+function registerSW(){if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{})}
+/* ===== Pasos: hora retroactiva y desbloqueo ===== */
+function doAct(r,id,back){
+  const ac=actById(id),u=unmet(r,ac),f=chkFail(r,ac);
+  if(u.length){toast('PARE: antes falta «'+u[0].t+'»','red');return false}
+  if(f.length){toast('PARE: '+f[0].msg,'red');return false}
+  if(ac.kind==='num'&&!V('qpax').trim()){toast('Escriba la cifra de pasajeros','red');return false}
+  let why='';
+  if(back){why=V('bwhy');if(!why){toast('Indique el motivo de la hora retroactiva','red');return false}
+    if(id==='go'&&r.arr.ata&&now()-back*MIN<r.arr.ata){toast('Chocks ON no puede ser antes del ATA ('+hm(r.arr.ata)+')','red');return false}}
+  window._undo={id:r.id,snap:JSON.stringify(r.insp)};
+  if(back){(r.insp.edits=r.insp.edits||[]).push({t:now(),act:id,min:back,why,by:me()[1]});log('Hora retroactiva −'+back+' min en «'+ac.t+'» ('+why+') · '+r.dep.num);S.backFor=null}
+  if(!r.insp.started)r.insp.started=now();
+  AT=back||0;try{ac.run(r,V('qpax'))}finally{AT=0}
+  syncAuto(r);log(ac.t+' · '+r.dep.num);queue();save();render();toastUndo(ac.t);window.scrollTo(0,0);return true}
+function backUI(r,a){
+  let h=`<button class="b sec" style="margin-top:10px;min-height:44px" data-a="backtoggle" data-id="${a.id}">${S.backFor===a.id?'Cancelar':'Lo hice antes'}</button>`;
+  if(S.opts.qr&&a.id==='go')h+=`<button class="b sec" style="margin-top:8px;min-height:44px" data-a="qropen">Escanear QR de posición (opcional)</button>`;
+  if(S.backFor===a.id)h+=`<div style="margin-top:10px;border-top:1px solid var(--line2);padding-top:10px"><div class="k">¿Hace cuánto lo hizo?</div><div class="seg s5" style="margin-top:6px">${[2,5,10,15,30].map(n=>`<button data-a="actback" data-id="${a.id}" data-n="${n}">−${n}′</button>`).join('')}</div><span class="fl">Motivo (obligatorio)</span><select id="bwhy"><option value="">Elija…</option>${['Olvidé marcarlo','Sin señal','Falla del equipo','Estaba atendiendo otra tarea','Otro'].map(x=>`<option>${x}</option>`).join('')}</select><div class="sub" style="margin-top:6px">Queda registrado como hora retroactiva, con su motivo.</div></div>`;
+  return h}
+function ovrUI(r,a){
+  const rq=r.insp.req,opts=`<span class="fl" style="color:#fff">Motivo</span><select id="owhy">${['Falla de equipo','Sin señal','Emergencia operativa','Instrucción del supervisor','Otro'].map(x=>`<option>${x}</option>`).join('')}</select>`;
+  if(role()==='SUP')return opts+`<button class="b" data-a="ovrok" data-id="${a.id}">Desbloquear este paso (supervisor)</button>`;
+  if(role()==='TRC'){if(rq&&rq.act===a.id)return `<div style="margin-top:10px;font-weight:700">Solicitud enviada a las ${hm(rq.at)}. Esperando al supervisor.</div>`;return opts+`<button class="b" data-a="ovrreq" data-id="${a.id}">Pedir desbloqueo al supervisor</button>`}
+  return ''}
+function reqTag(r){const rq=r.insp.req;if(!rq||r.insp.cerrada||role()==='TRC')return '';
+  return `<div style="margin-top:6px"><span class="st amb">Pide desbloqueo</span> <span class="sub">${esc(actById(rq.act).t)} · ${esc(rq.why)}</span> ${role()==='SUP'?`<button class="b sm" data-a="ovrapprove" data-id="${r.id}">Aprobar</button>`:''}</div>`}
+function auditPanel(r){const i=r.insp,e=i.edits||[],o=Object.entries(i.ovr||{}),h=i.hand||[];if(!e.length&&!o.length&&!h.length&&!i.req)return '';
+  return `<div class="pn"><div class="lbl amb">AJUSTES Y EXCEPCIONES</div>${e.map(x=>`<div class="rw"><div class="tm">${hm(x.t)}</div><div class="grow"><b>Hora retroactiva −${x.min} min</b> · ${esc(actById(x.act).t)}<div class="sub">${esc(x.why)} · ${esc(x.by)}</div></div></div>`).join('')}${o.map(([k,x])=>`<div class="rw"><div class="tm">${hm(x.at)}</div><div class="grow"><b>Desbloqueo</b> · ${esc(actById(k).t)}<div class="sub">${esc(x.why)} · ${esc(x.by)}</div></div></div>`).join('')}${h.map(x=>`<div class="rw"><div class="tm">${hm(x.at)}</div><div class="grow"><b>Relevo</b> ${esc(x.from)} → ${esc(x.to)}<div class="sub">En el paso ${x.step} de ${ACTS.length}</div></div></div>`).join('')}${i.req?`<div class="rw"><div class="grow"><b>Solicitud pendiente</b> · ${esc(actById(i.req.act).t)}<div class="sub">${esc(i.req.why)} · ${esc(i.req.by)}</div></div></div>`:''}</div>`}
+/* ===== Relevo y varias rotaciones ===== */
+function handoff(r,from,to){(r.insp.hand=r.insp.hand||[]).push({from:uname(from),to:uname(to),at:now(),step:ACTS.filter(a=>a.done(r)).length+1,ack:false});log('Relevo de '+r.dep.num+': '+uname(from)+' → '+uname(to))}
+function handBanner(r){const h=r.insp.hand||[],l=h[h.length-1];if(!l||l.ack||role()!=='TRC'||l.to!==me()[1])return '';
+  return `<div class="pn" style="border-color:var(--o)"><div class="lbl amb">RELEVO RECIBIDO</div><div class="pb"><div>Recibió este vuelo de <b>${esc(l.from)}</b> a las ${hm(l.at)}. Está en el paso <b>${l.step} de ${ACTS.length}</b>. Revise el avance antes de continuar.</div><button class="b" style="margin-top:10px" data-a="handack">Entendido</button></div></div>`}
+function relevoUI(r){if(role()!=='TRC'||r.insp.cerrada||!r.insp.started)return '';
+  const others=USERS.filter(u=>u[2]==='TRC'&&u[0]!==S.uid);
+  if(S.relevo!==r.id)return `<div style="text-align:center;margin-top:14px"><button class="b sm sec" data-a="relevotoggle">Relevar este vuelo a otro TRC</button></div>`;
+  return `<div class="pn"><div class="lbl">RELEVO DE VUELO</div><div class="pb"><div class="sub">El otro TRC recibe el vuelo en el paso en que está y ve todo su avance.</div><span class="fl">Relevar a</span><select id="rvto">${others.map(u=>`<option value="${u[0]}">${u[1]}</option>`).join('')}</select><div class="row" style="margin-top:10px"><button class="b sec" data-a="relevotoggle">Cancelar</button><button class="b" data-a="relevo">Confirmar relevo</button></div></div></div>`}
+function enCurso(v){const ec=v.filter(r=>r.insp.started&&!r.insp.cerrada);if(ec.length<2)return '';
+  return `<div class="pn"><div class="lbl">EN CURSO AHORA (${ec.length})</div>${ec.map(r=>{const cu=curAct(r),go=r.insp.ms.go,el=go?Math.round((now()-go)/MIN):null;return `<div class="rw" data-a="open" data-id="${r.id}" style="cursor:pointer"><div class="grow"><b>${r.dep.num}</b> · POS ${esc(r.gate)}<div class="sub">${cu?esc(cu.a.t):'Listo para cerrar'}</div></div>${cu&&cu.fails.length?'<span class="st red">PARE</span>':''}<span class="st ln">${el!=null?'T+'+el+' min':'sin Chocks'}</span></div>`}).join('')}</div>`}
+/* ===== QR de posición (opcional; apagado por defecto) ===== */
+function qrPanel(r){return `<div class="pn"><div class="lbl"><span>QR DE POSICIÓN (OPCIONAL)</span><button class="b sm sec" style="min-height:26px;padding:0 8px" data-a="qrclose">Cerrar</button></div><div class="pb"><video id="qrv" playsinline muted style="width:100%;max-height:220px;background:#000;border-radius:10px"></video><div class="sub" id="qrmsg" style="margin:8px 0">Apunte al código de la posición.</div><span class="fl">…o escriba el código (ej. POS:4:R o 4R)</span><div class="row"><input id="qrtxt" placeholder="POS:4:R"><button class="b sm" data-a="qrapply">Aplicar</button></div></div></div>`}
+function qrMsg(m){const e=document.getElementById('qrmsg');if(e)e.textContent=m}
+async function qrStart(){const v=document.getElementById('qrv');if(!v||window._qr)return;window._qr=true;
+  try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});window._qrs=st;v.srcObject=st;await v.play();
+    if(!('BarcodeDetector' in window)){qrMsg('Este navegador no lee QR: escriba el código.');return}
+    const det=new BarcodeDetector({formats:['qr_code']});
+    const loop=async()=>{if(!window._qr||!document.getElementById('qrv'))return;try{const c=await det.detect(v);if(c.length){qrApply(c[0].rawValue);return}}catch(e){}setTimeout(loop,300)};loop()}
+  catch(e){qrMsg('No se pudo abrir la cámara: escriba el código.')}}
+function qrStop(){window._qr=false;if(window._qrs){window._qrs.getTracks().forEach(t=>t.stop());window._qrs=null}S.qrOpen=null}
+function qrApply(raw){const r=cur(),s=String(raw||'').trim();const m=/^POS:([A-Za-z0-9]+):([CR])$/i.exec(s)||/^(\d+[A-Za-z]?)([CR])$/i.exec(s);
+  if(!r||!m){qrMsg('Código no válido: '+s);toast('Código de posición no válido','red');return}
+  const old=r.gate+' '+tipo(r);r.gate=m[1].toUpperCase();r.pt=m[2].toUpperCase();log('Posición por QR en '+r.dep.num+': '+old+' → '+r.gate+' '+tipo(r));qrStop();queue();save();render();toast('Posición '+r.gate+' · '+tipo(r))}
+const _render0=render;render=function(){_render0();if(S.opts&&S.opts.qr&&S.qrOpen&&!window._qr)setTimeout(qrStart,60)};
+/* ===== Supervisor: barra, importación de itinerario ===== */
+function supBar(){if(role()!=='SUP')return '';const pend=S.rots.filter(r=>r.insp.req&&!r.insp.cerrada).length;
+  return `<div class="pn"><div class="pb row sp wr"><div class="row wr"><button class="b sm" data-a="page" data-k="imp">Cargar itinerario (CSV)</button>${pend?`<span class="st amb">${pend} solicitud(es) de desbloqueo</span>`:''}</div><div class="row"><span class="sub">QR de posición (opcional)</span><button class="b sm ${S.opts.qr?'':'sec'}" data-a="opt" data-k="qr">${S.opts.qr?'Activado':'Apagado'}</button></div></div></div>`}
+const IMPH=['matricula','posicion','tipo','vuelo_llegada','origen','sta','eta','ata','vuelo_salida','destino','std','escenario','trc_id'];
+function csvTpl(){return [IMPH.join(';'),'HI-0001;4;R;6269;SCL;13:45;13:50;;6268;EZE;15:05;ds;T-1001','HI-0002;7;C;6171;SDQ;16:20;16:20;;6172;YUL;17:20;std;T-1002']}
+function parseCSV(tx){const lines=tx.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return [];const sep=[';','\t',','].find(s=>lines[0].includes(s))||';';return lines.map(l=>l.split(sep).map(c=>c.trim().replace(/^"|"$/g,'')))}
+function hmTs(s){const m=/^(\d{1,2}):(\d{2})$/.exec((s||'').trim());if(!m)return null;const d=new Date(now());d.setHours(+m[1],+m[2],0,0);return d.getTime()}
+function newInsp(){return {started:null,checks:{},ms:{},gse:[],docs:Object.fromEntries(DOCT.map(([k])=>[k,{st:k==='ls'?'na':'pend'}])),hojas:{},nov:[],pax:{},delay:null,firma:null,cerrada:null,notas:'',apu:false}}
+function buildRot(reg,gate,pt,an,from,sta,eta,ata,dn,to,std,sc,trc){buildRot.n=(buildRot.n||0)+1;
+  const arr={num:'DM'+an,o:from,d:'PUJ',std:null,sta,etd:null,eta,atd:null,ata:ata||null,dep:null,land:null};
+  const dep={num:'DM'+dn,o:'PUJ',d:to,std,sta:null,etd:std,eta:null,atd:null,ata:null,dep:null,land:null};
+  return {id:'r'+(Date.now()%1e9)+'_'+buildRot.n,reg,gate,pt,arr,dep,sc,trc,insp:newInsp()}}
+function importRows(tx){const rows=parseCSV(tx),err=[],out=[];const st=(rows[0]&&/matricula/i.test(rows[0].join(' ')))?1:0;
+  rows.slice(st).forEach((c,i)=>{const ln=i+st+1,[reg,gate,tp,an,from,sta,eta,ata,dn,to,std,sc,tid]=c,e=[];
+    if(!reg)e.push('matrícula');if(!gate)e.push('posición');if(!/^[CR]$/i.test(tp||''))e.push('tipo (C o R)');if(!an)e.push('vuelo de llegada');if(!from)e.push('origen');if(hmTs(sta)==null)e.push('STA (HH:MM)');if(!dn)e.push('vuelo de salida');if(!to)e.push('destino');if(hmTs(std)==null)e.push('STD (HH:MM)');
+    const scen=(sc||'std').toLowerCase();if(!SCEN[scen])e.push('escenario (std, usa, ds o cnx)');
+    const u=tid?USERS.find(x=>x[3].toLowerCase()===tid.toLowerCase()&&x[2]==='TRC'):null;if(tid&&!u)e.push('trc_id desconocido');
+    if(e.length){err.push('Línea '+ln+': falta o es inválido → '+e.join(', '));return}
+    const tSta=hmTs(sta);let tStd=hmTs(std);if(tStd<=tSta)tStd+=864e5;
+    out.push(buildRot(reg,gate,tp.toUpperCase(),an,from,tSta,hmTs(eta)??tSta,hmTs(ata),dn,to,tStd,scen,u?u[0]:null))});
+  return {out,err}}
+function doImport(){const tx=V('csvtxt');S.csvtxt=tx;S.impok=null;
+  if(!tx.trim()){S.imperr=['No hay contenido para importar.'];save();render();return}
+  const {out,err}=importRows(tx);
+  if(err.length||!out.length){S.imperr=err.length?err:['No se encontraron filas válidas.'];save();render();return}
+  if(S.impmode!=='add'&&S.rots.some(r=>r.insp.started)&&!S.impconfirm){S.impconfirm=true;S.imperr=['Hay rotaciones con inspección iniciada. Si reemplaza, se descartan. Toque Importar otra vez para confirmar, o elija Agregar.'];save();render();return}
+  S.impconfirm=false;S.rots=S.impmode==='add'?S.rots.concat(out):out;S.imperr=null;S.impok=out.length+' rotación(es) importada(s). Ya aparecen en el itinerario.';log('Importó itinerario: '+out.length+' rotación(es) ('+(S.impmode==='add'?'agregadas':'reemplazo')+')');save();render()}
+function vImp(){
+  return hero('Cargar itinerario','Importe las rotaciones del día desde un archivo CSV o pegando el texto. Cada fila es una rotación: llegada y salida de la misma aeronave.')+
+  `<div class="pn"><div class="lbl">PASO 1 · PLANTILLA</div><div class="pb"><div class="sub">Columnas: ${IMPH.join(', ')}. Horas HH:MM. tipo: C (contacto) o R (remota). escenario: std, usa, ds o cnx. trc_id es opcional (ej. T-1001). Desde Excel use Guardar como → CSV.</div><button class="b sm" style="margin-top:10px" data-a="csvtpl">Descargar plantilla</button></div></div>
+  <div class="pn"><div class="lbl">PASO 2 · ARCHIVO O TEXTO</div><div class="pb"><label class="b sec" style="cursor:pointer">Elegir archivo CSV<input type="file" accept=".csv,.txt,text/csv" hidden data-csv="1"></label><span class="fl">…o pegue el contenido</span><textarea id="csvtxt" rows="6" placeholder="matricula;posicion;tipo;…">${esc(S.csvtxt||'')}</textarea>
+  <span class="fl">¿Qué hacer con el itinerario actual?</span><div class="seg"><button class="${S.impmode!=='add'?'sel':''}" data-a="impmode" data-v="rep">Reemplazarlo</button><button class="${S.impmode==='add'?'sel':''}" data-a="impmode" data-v="add">Agregar</button></div>
+  <button class="b" style="margin-top:12px" data-a="impgo">Importar</button>${S.imperr&&S.imperr.length?`<div class="stop"><div class="big" style="font-size:22px">REVISAR</div><ul>${S.imperr.map(e=>`<li>${esc(e)}</li>`).join('')}</ul></div>`:''}${S.impok?`<div class="nt">${esc(S.impok)}</div>`:''}</div></div>
+  <div style="margin-top:12px"><button class="b sm sec" data-a="page" data-k="itin">← Itinerario</button></div>`}
+/* ===== Indicadores y exportación ===== */
+const fdt=ts=>ts?new Date(ts).toLocaleString('sv-SE').slice(0,16):'';
+function dl(name,rows){const csv='\uFEFF'+rows.map(r=>r.map(c=>{c=String(c??'');return /[;"\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function csvGse(){const rows=[['fecha','vuelo_llegada','vuelo_salida','matricula','posicion','tipo_posicion','usa_apu','equipo','unidad','proveedor','inicio','fin','minutos','facturable']];
+  S.rots.forEach(r=>r.insp.gse.forEach(g=>{const m=Math.round(((g.end||now())-g.start)/MIN),gp=g.type==='GPU'||g.type==='ACU';let f='Sí';if(r.insp.apu&&gp)f='No (usa APU)';else if(r.pt==='C'&&gp)f='Revisar (posición de contacto)';rows.push([dmy(r.dep.std),r.arr.num,r.dep.num,r.reg,r.gate,tipo(r),r.insp.apu?'Sí':'No',g.type,g.unit,g.prov,fdt(g.start),fdt(g.end),m,f])}));dl('gse_facturacion.csv',rows)}
+function csvRot(){const rows=[['fecha','vuelo_llegada','vuelo_salida','matricula','posicion','tipo','STA','ETA','ATA','chocks_on','STD','off_block','tat_real_min','demora_min','codigo_demora','responsable_demora','trc','estado','horas_retroactivas','desbloqueos']];
+  S.rots.forEach(r=>{const i=r.insp;rows.push([dmy(r.dep.std),r.arr.num,r.dep.num,r.reg,r.gate,tipo(r),fdt(r.arr.sta),fdt(r.arr.eta),fdt(r.arr.ata),fdt(i.ms.go),fdt(r.dep.std),fdt(i.ms.ob||r.dep.atd),i.ms.go&&i.ms.ob?Math.round((i.ms.ob-i.ms.go)/MIN):'',i.delay?i.delay.min:'',i.delay?i.delay.code:'',i.delay?i.delay.resp:'',uname(r.trc)||'',i.cerrada?'Cerrada':rstat(r)[0],(i.edits||[]).length,Object.keys(i.ovr||{}).length])});dl('rotaciones.csv',rows)}
+function vKpi(){
+  const rs=S.rots,cer=rs.filter(r=>r.insp.cerrada);
+  const tat=cer.map(r=>r.insp.ms.go&&r.insp.ms.ob?Math.round((r.insp.ms.ob-r.insp.ms.go)/MIN):null).filter(x=>x!=null),avg=tat.length?Math.round(tat.reduce((a,b)=>a+b,0)/tat.length):null;
+  const dls=rs.filter(r=>r.insp.delay),dmin=dls.reduce((a,r)=>a+r.insp.delay.min,0);
+  const lateGo=rs.filter(r=>r.insp.ms.go&&r.arr.ata&&r.insp.ms.go-r.arr.ata>5*MIN).length,noGo=rs.filter(r=>r.arr.ata&&!r.insp.ms.go&&!r.insp.cerrada).length;
+  const nE=rs.reduce((a,r)=>a+(r.insp.edits||[]).length,0),nO=rs.reduce((a,r)=>a+Object.keys(r.insp.ovr||{}).length,0);
+  const causes={};dls.forEach(r=>{const k=r.insp.delay.code+' · '+((DELAY.find(d=>d[0]===r.insp.delay.code)||[])[1]||'');causes[k]=(causes[k]||0)+r.insp.delay.min});
+  const gse={};rs.forEach(r=>r.insp.gse.forEach(g=>{gse[g.type]=(gse[g.type]||0)+((g.end||now())-g.start)/MIN}));
+  const bars=(o,u)=>{const e=Object.entries(o).sort((a,b)=>b[1]-a[1]),m=Math.max(1,...e.map(x=>x[1]));return e.length?`<div class="bars">${e.map(([k,v])=>`<div class="br"><span>${esc(k)}</span><div><i style="width:${Math.round(v/m*100)}%"></i></div><b>${Math.round(v)}${u}</b></div>`).join('')}</div>`:'<div class="pb sub">Sin datos.</div>'};
+  const trcs=USERS.filter(u=>u[2]==='TRC').map(u=>{const m=rs.filter(r=>r.trc===u[0]);return `<tr><td>${u[1]}</td><td>${m.length}</td><td>${m.filter(r=>r.insp.cerrada).length}</td><td>${m.reduce((a,r)=>a+(r.insp.delay?r.insp.delay.min:0),0)} min</td><td>${m.reduce((a,r)=>a+(r.insp.edits||[]).length,0)}</td><td>${m.reduce((a,r)=>a+Object.keys(r.insp.ovr||{}).length,0)}</td></tr>`}).join('');
+  return hero('Indicadores','Resumen de la jornada en PUJ con lo registrado en la app. Con datos de demostración.')+
+  `<div class="g4"><div><div class="k">Rotaciones</div><b>${rs.length}</b></div><div><div class="k">Cerradas</div><b>${cer.length}</b></div><div><div class="k">TAT real promedio</div><b>${avg!=null?avg+' min':'—'}</b></div><div><div class="k">Demora total</div><b>${dmin} min</b></div></div>
+  <div class="g4"><div><div class="k">Chocks ON tarde (&gt;5 min)</div><b>${lateGo}</b></div><div><div class="k">Sin Chocks ON ahora</div><b>${noGo}</b></div><div><div class="k">Horas retroactivas</div><b>${nE}</b></div><div><div class="k">Desbloqueos</div><b>${nO}</b></div></div>
+  <div class="pn"><div class="lbl">MINUTOS DE DEMORA POR CAUSA</div>${bars(causes,' min')}</div>
+  <div class="pn"><div class="lbl">USO DE GSE (MINUTOS)</div>${bars(gse,' min')}</div>
+  <div class="pn"><div class="lbl">POR TRC</div><div class="tw"><table><thead><tr><th>TRC</th><th>Rotaciones</th><th>Cerradas</th><th>Demora</th><th>Horas retro.</th><th>Desbloqueos</th></tr></thead><tbody>${trcs}</tbody></table></div></div>
+  <div class="pn"><div class="lbl">EXPORTAR</div><div class="pb row wr"><button class="b sm" data-a="csvgse">GSE para facturación (CSV)</button><button class="b sm sec" data-a="csvrot">Rotaciones (CSV)</button></div></div>`}
+let drawing=false;
+function pt(e,c){const b=c.getBoundingClientRect();return [(e.clientX-b.left)*c.width/b.width,(e.clientY-b.top)*c.height/b.height]}
+document.addEventListener('pointerdown',e=>{if(e.target.id!=='sig')return;drawing=true;const c=e.target,x=c.getContext('2d');x.lineWidth=4;x.lineCap='round';x.strokeStyle='#14110F';x.beginPath();const[p,q]=pt(e,c);x.moveTo(p,q);window._sig=true;c.setPointerCapture(e.pointerId)});
+document.addEventListener('pointermove',e=>{if(!drawing||e.target.id!=='sig')return;const c=e.target,x=c.getContext('2d'),[p,q]=pt(e,c);x.lineTo(p,q);x.stroke()});
+document.addEventListener('pointerup',()=>{drawing=false});
+setInterval(()=>{const t=document.activeElement&&document.activeElement.tagName;if(!['INPUT','TEXTAREA','SELECT'].includes(t)&&!window._sig&&!window._qr){S._keep=true;render()}},30000);
+setInterval(alertCheck,15000);
+S.rots.forEach(syncAuto);applyTheme();save();
+render();imgLoad();registerSW();
+</script>
+</body>
+</html>
